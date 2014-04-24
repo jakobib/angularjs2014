@@ -12,6 +12,7 @@ modules to access library services in particular.
   into loosely coupled modules that can be used independently,
   is rarely found in library software
 
+![getting a library service into a web application](layers.png)
 
 # AngularJS
 
@@ -75,15 +76,11 @@ article, may at least add some motivation to provide library services via open
 APIs.
 
 Even if AngularJS is or will not be the technology of your choice, the
-principle illustrated in figure X makes sense. Libraryies should not only
-expose their services via openly specified APIs but also provide client
-libraries to facilitate the integration of these services into web
-applications. To minimize the work of doing so, one should build on
+principle illustrated in the initial figure above makes sense. Libraryies
+should not only expose their services via openly specified APIs but also
+provide client libraries to facilitate the integration of these services into
+web applications. To minimize the work of doing so, one should build on
 standardized APIs instead of (re)inventing new APIs for every library system.
-
-figure X:
-
-    service --> API --> API module ---> web application
 
 ...lessons learned: development of an API and an API client as AngularJS module
 is fruitful
@@ -100,6 +97,9 @@ evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)...
 # References
 
 * ...
-* <http://ngmodules.org/>
+* AngularJS Modules. <http://ngmodules.org/>
+* ...
+* Jakob Voß: *SeeAlso: A Simple Linkserver Protocol*. Ariadne Issue 57, 2008
+  <http://www.ariadne.ac.uk/issue57/voss/>
 * ...
 

@@ -1,0 +1,11 @@
+// dot layers.dot -Tpng -olayers.png
+digraph {
+    rankdir="LR";
+    ranksep="0.39"; // 500px maximum width
+    node[shape=box,style="rounded,filled",fontsize=13,fillcolor="#F8F8F8",color="#AAAAAA"];
+    service -> api -> module -> application;
+    service[label="library\nservice",style="solid,filled"];
+    api[label="API\n"];
+    module[label="AngularJS\nmodule"];
+    application[label="web\napplication",style="solid,filled"];
+}
