@@ -7,7 +7,7 @@ modules to access library services in particular.
 
 *motivation to expose library services with AngularJS...*
 
-* Requires to first to provide core library services via APIs
+* Requires first to provide core library services via APIs
 * Service Oriented Architecture, that is to divide an application
   into loosely coupled modules that can be used independently,
   is rarely found in library software
@@ -51,7 +51,10 @@ also used for CSL (?)
 
 ## Embedding Availability Information with ng-daia
 
-<http://gbv.github.io/ng-daia/>
+The Document Availability Information API (DAIA) defines a data model for encoding information about the availability of documents, specified for JSON, XML and RDF. Its aim is to provide a way for libraries to allow open and easy-to-use access to their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites.
+
+Ng-daia is an AngularJS module for handling DAIA responses in JSON received from a DAIA server. This presents website creators with a way to embed current availability information into their websites or web-apps. It is hosted on a public repository and is documented and downloadable at <http://gbv.github.io/ng-daia/>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of domuments in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, daia-simple defines an additional format provided by this module, providing the most preferable result for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as ng-if and ng-repeat. In addition, the templates provide localization capabilities using [angular-translate](http://angular-translate.github.io/).
+
 
 ...
 
