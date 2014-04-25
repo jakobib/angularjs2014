@@ -58,12 +58,29 @@ also used for CSL (?)
 
 ## Embedding Availability Information with ng-daia
 
-The Document Availability Information API (DAIA) defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites. Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module ng-daia implements client code to execute and process a DAIA query and to display holding information in convenient form.
+The Document Availability Information API (DAIA) defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites. Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module ng-daia implements client code to execute and process a DAIA query and to display holding information in convenient form. The integration into HTML is exemplarily documented in the following code: 
 
-ng-daia is hosted in a public git repository, documented and downloadable at <http://gbv.github.io/ng-daia/>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of domuments in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, `daia-simple` defines an additional format provided by this module, providing the most preferable result for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as `ng-if` and `ng-repeat`. The output using these template may look like this:
+```
+<html ng-app="myApp">
+<head>
+  <script src="angular.min.js"></script>
+  <script src="ng-daia.min.js"></script>
+  <script>angular.module('myApp', ['ngDAIA']);</script>
+  <link href="ng-daia.css" rel="stylesheet" />
+</head>
+<body>
+  <div daia-api="http://your-daia-base-url" daia-id="your-document-id">
+  </div>
+</body>
+</html>
+
+```
+
+ng-daia is hosted in a public git repository, documented and downloadable at <http://gbv.github.io/ng-daia/>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of domuments in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, `daia-simple` defines an additional format provided by this module, providing the most preferable result for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as `ng-if` and `ng-repeat`. The output using these templates may look like this:
+
  ![example output of ng-daia with standard templates](ngdaia_demo_EN_full.png)
- 
-In addition, the templates provide localization capabilities using [angular-translate](http://angular-translate.github.io/).
+
+In this example you can see the nested structure of the DAIA data model, which consists of an outer layer for institutional and document information as a whole. The document object contains one or more items, which can be further attributed to departments of the holding institution or a location (e.g. shelf mark). Within each item object, the availability for specific services is enclosed, as well as limitations and further options for those services (such as reserving a currently lent physical copy). The filter `daia-simple` would in this example return an object with a field `status: 'loan'`, as loan is currently the most preferable available service. In addition, the templates provide localization capabilities using [angular-translate](http://angular-translate.github.io/).
 
 
 ...
