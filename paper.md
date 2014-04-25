@@ -45,16 +45,24 @@ The practical inclusion of library services in websites with AngularJS will be i
 
 ## Embedding Suggestions with ng-suggest
 
-... OpenSearch Suggestions and SeeAlso API ...
+The OpenSearch standard for search engine description includes a specification how to query search suggestions and autocomplete, as provided by many search applications. The method can also be used to support 
+tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:
+
+    [
+      ...
+    ]
+
+Despite the simplicity of this format, making use of it still requires a client library.
+
+![](http://ariadne-media.ukoln.info/grfx/img/issue57-voss/figure-1.jpg)
+
+*...TODO: add another screenshot of search suggestions...*
+
+ng-suggest is ...
 
 <http://gbv.github.io/ng-suggest/>
 
-...(e.g. Recommender services)...
-
-See also <http://journal.code4lib.org/articles/5994> ...
-
-also used for CSL (?)
-
+Similar services use other JSON formats, so ng-daia supports mapping from these to OpenSerach suggestions.
 
 ## Embedding Availability Information with ng-daia
 
@@ -109,7 +117,10 @@ evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)...
 
 * Marshall Breeding: Opening up Library Systems through Web Services and SOA: Hype or Reality?. 2009
 * AngularJS Modules. <http://ngmodules.org/>
+* Shun Nagaya, Yutaka Hayashi, Shuhei Otani and Keizo Itabashi: *Controlled Terms or Free Terms? A JavaScript Library to Utilize Subject Headings and Thesauri on the Web*. code4lib journal Issue 15, 2011-10-31 <http://journal.code4lib.org/articles/5994>
 * Document Availability Information API (DAIA)
+* DeWitt Clinton: *OpenSearch Suggestions*.
+  <http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions>. 2006
 * Jakob Voß: *SeeAlso: A Simple Linkserver Protocol*. Ariadne Issue 57, 2008
   <http://www.ariadne.ac.uk/issue57/voss/>
 * ...
