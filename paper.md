@@ -11,7 +11,7 @@ modules for accessing library services in particular.
 
 *...motivation to expose library services with AngularJS...*
 
-The demand to open up library systems through web services is known since 
+The demand to open up library systems through web services is known for 
 years [@Breeding2009]. Nevertheless service oriented architecture (SOA), 
 that is to divide an application into loosely coupled modules that can
 be used independently, is still not common in library software.
@@ -45,8 +45,7 @@ The practical inclusion of library services in websites with AngularJS will be i
 
 ## Embedding Suggestions with ng-suggest
 
-The OpenSearch standard for search engine description includes a specification how to query search suggestions and autocomplete, as provided by many search applications. The method can also be used to support 
-tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:
+The OpenSearch standard for search engine description includes a specification for how to query search suggestions and autocomplete, as provided by many search applications. The method can also be used to support tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:
 
     [
       ...
@@ -58,15 +57,14 @@ Despite the simplicity of this format, making use of it still requires a client 
 
 *...TODO: add another screenshot of search suggestions...*
 
-ng-suggest is ...
+As is the philosophy of AngularJS, the [ng-suggest module](http://gbv.github.io/ng-suggest/) is aimed at providing an easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the [Bootstrap UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for web applications.
 
-<http://gbv.github.io/ng-suggest/>
 
-Similar services use other JSON formats, so ng-daia supports mapping from these to OpenSerach suggestions.
+Similar services use other JSON formats, so ng-suggest supports mapping from these to OpenSerach suggestions.
 
 ## Embedding Availability Information with ng-daia
 
-The Document Availability Information API (DAIA) defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites. Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module ng-daia implements client code to execute and process a DAIA query and to display holding information in convenient form. The integration into HTML is exemplarily documented in the following code: 
+The [Document Availability Information API (DAIA)](http://www.gbv.de/wikis/cls/DAIA_-_Document_Availability_Information_API) defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites. Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module ng-daia implements client code to execute and process a DAIA query and to display holding information in convenient form. The integration into HTML is exemplarily documented in the following code: 
 
 ```
 <html ng-app="myApp">
@@ -81,19 +79,15 @@ The Document Availability Information API (DAIA) defines a data model and an HTT
   </div>
 </body>
 </html>
-
 ```
 
-ng-daia is hosted in a public git repository, documented and downloadable at <http://gbv.github.io/ng-daia/>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of documents in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, `daia-simple` defines an additional format provided by this module, providing the most preferable result for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as `ng-if` and `ng-repeat`. The output using these templates may look like this:
+ng-daia is hosted in a public git repository, documented and downloadable at <http://gbv.github.io/ng-daia/>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of documents in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, `daia-simple` defines an additional format provided by this module, providing the most preferable status for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as `ng-if` and `ng-repeat`. The output using these templates may look like this:
 
  ![example output of ng-daia with standard templates](ngdaia_demo_EN_full.png)
 
 In this example you can see the nested structure of the DAIA data model, which consists of an outer layer for institutional and document information as a whole. The document object contains one or more items, which can be further attributed to departments of the holding institution or a location (e.g. shelf mark). Within each item object, the availability for specific services is enclosed, as well as limitations and further options for those services (such as reserving a currently lent physical copy). The filter `daia-simple` would in this example return an object with a field `status: 'loan'`, as loan is currently the most preferable available service. In addition, the templates provide localization capabilities using [angular-translate](http://angular-translate.github.io/).
 
-
-...
-
-As shown above, website creators can easily embed current availability information into their websites or web-apps.
+Utilizing this tool will allow website creators to easily embedd either current information concerning a specific document, or providing a way to request availability information from multiple sources.
 
 # Conclusions
 
