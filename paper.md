@@ -9,16 +9,36 @@ modules for accessing library services in particular.
 
 # Introduction
 
-*...motivation to expose library services with AngularJS...*
-
 The demand to open up library systems through web services is known for 
 years [@Breeding2009]. Nevertheless service oriented architecture (SOA), 
 that is to divide an application into loosely coupled modules that can
 be used independently, is still not common in library software.
 
-...
+One of the reasons to persist on monolithical systems may be a lack of
+motivation to provide library services via APIs on the web. In contrast to
+user interfaces (UI), an application programming interface (API) cannot
+be viewed, used, and judget by anyone. An API is not a an explicit service
+but a basis for creation of service applications. Without APIs, applications
+are difficult to build and services can only be provided in limited form.
+Without applications, however, it is difficult to justify the need for an
+API.
 
-The following diagram illustrates the general architecture:
+To give an example, as long as information about current availability of 
+documents was only displayed in local library OPACs there was no motivation
+to create a public API to query this information. With the need to display
+availability information in discovery interfaces, the Document Availability 
+Information API (DAIA) was specified and implemented at GBV [@citeXXX]. This
+use case, however, is very limited as both API provider and client application
+are managed by the same institution. The full benefit of an open API is not 
+revealed until different applications by different parties make use of it.
+
+This paper will demonstrate a possible strategy to increase visibility and 
+use of library APIs by providing client modules that facilitate the creation
+of applications by third parties. The modules are based on the JavaScript
+framework AngularJS which is getting more and more popular among developers
+of web applications. The general strategy is illustrated in the following
+diagram:
+
 
 ![getting a library service into a web application](layers.png)
 
