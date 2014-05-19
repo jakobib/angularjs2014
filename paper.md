@@ -11,7 +11,7 @@ modules for accessing library services in particular.
 
 *...motivation to expose library services with AngularJS...*
 
-The demand to open up library systems through web services is known for 
+The demand to open up library systems through web services has been known for 
 years [@Breeding2009]. Nevertheless service oriented architecture (SOA), 
 that is to divide an application into loosely coupled modules that can
 be used independently, is still not common in library software.
@@ -23,6 +23,18 @@ The following diagram illustrates the general architecture:
 ![getting a library service into a web application](layers.png)
 
 # AngularJS
+
+As one of several JavaScript frameworks, [AngularJS](https://angularjs.org/) aims to enhance the functionality of the language by providing features supporting implementation and testing. The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These "directives" can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished by an intricate template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes, again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket `{{}}` syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (`ng-if` and `ng-repeat`, respectively), which can simply be used as parameters. For example,
+
+```
+<ul ng-repeat="d in data">
+    <li ng-if="d.id">{{d.value}}</li>
+</ul>
+```
+
+will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation.
+
+
 
 *general overview of AngularJS (how it works, strength, alternatives...)*
 
