@@ -7,3 +7,4 @@ can be used to call the conversion from Markdown and BibTeX to HTML:
     apt-get install pandoc pandoc-citeproc
     make
 
+![](https://travis-ci.org/jakobib/angularjs2014.svg?branch=master)
