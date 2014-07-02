@@ -70,22 +70,14 @@ diagram:
 
 *general overview of AngularJS (how it works, strength, alternatives...)*
 
-As one of several JavaScript frameworks, [AngularJS](https://angularjs.org/)
-aims to enhance the functionality of the language by providing features
-supporting implementation and testing. The first tool for facilitating
-usability is the promotion of discrete submodules, in which different behaviors
-can be defined seperately of each other. These "directives" can then be easily
-reused on their own in different applications. They are also a tool for
-seperating server side logic from client views, accomplished by an intricate
-template solution. AngularJS supports the inclusion of html-code via those
-templates, which can be assigned unique scopes, again to promote the reduction
-of dependencies. Combined with this functionality, the framework provides
-built-in two-way data binding. This in turn adds a lot of options for HTML
-coding, like the possibility to display variable values, automatically updated
-during runtime (Angular provides its curly bracket `{{}}` syntax to this end).
-Furthermore, AngularJS provides modules for including basic programming syntax
-into HTML, like if-prompts or loops (`ng-if` and `ng-repeat`, respectively),
-which can simply be used as parameters. For example,
+As one of several frameworks, [AngularJS](https://angularjs.org/) aims to enhance the functionality of JavaScript, specifically by providing features supporting modularisation and testing. Structurally, the framework is based on "modules", which contain the server-side logic and have to be included via an HTML `<script>`-tag.
+
+```
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
+
+```
+
+The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These "directives" can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket `{{}}` syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (`ng-if` and `ng-repeat`, respectively), which can simply be used as parameters. For example,
 
 ```
 <ul ng-repeat="d in data">
@@ -93,21 +85,7 @@ which can simply be used as parameters. For example,
 </ul>
 ```
 
-will display every index-item `value` of the `data` scope, if the subfield
-`data.id` exists for the specific item. Combined with the option to reuse other
-prebuilt modules, this greatly enriches the possibilities of DOM-manipulation.
-
-
-* declarative HTML (custom HTML tags and attributes) as "directives"
-* expressions and templates (logic features of AngularJS such as `ng-if` and `ng-repeat`)
-* separation of logic/view layer
-* separated scopes and two-way data-binding (`{{variable}}`)
-
-* AngularJS is designed to facilitate unit testing. Functionality of
-  applications is broken into parts that can be tested and reused
-  independently.
-
-* modules, some of them listed at <http://ngmodules.org/> [@ngmodules]
+will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <http://ngmodules.org/>.
 
 ...aka widgets...to build applications...
 
@@ -123,32 +101,20 @@ knowledge organisation systems (SKOS). *TODO: link*
 
 ## Embedding Suggestions with ng-suggest
 
-The OpenSearch standard for search engine description includes a specification
-for how to query search suggestions and autocomplete, as provided by many
-search applications. The method can also be used to support tagging with
-controlled vocabularies [@Nagaya2011] or by recommendation services to
-dynamically display additional information [@Voss2008]. A search suggestion, as
-specified by OpenSearch Suggestions [@Clinton2006] consists of a JSON array:
+The description for the OpenSearch standard for search engines includes a specification for how to query search suggestions and autocomplete services, as provided by many search applications. The method can also be used to support tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:
 
     [
-      ...TODO: example
+        "hon",["Hong Kong","Honolulu","Honduras","Honda","Honorary degree","Honshu","Honey","Honourable East India Company","Hong Kong Island","Honda in Formula One"]
     ]
 
 Despite the simplicity of this format, making use of it still requires a client
 library.
 
-![](http://ariadne-media.ukoln.info/grfx/img/issue57-voss/figure-1.jpg)
+![google typeahead](http://ariadne-media.ukoln.info/grfx/img/issue57-voss/figure-1.jpg)
 
 ![ng-suggest using Wikipedia OpenSearch Suggest](suggest_wikipedia_en.png)
 
-*...TODO: add another screenshot of search suggestions (wie im VZG aktuell-Artikel)...*
-
-As is the philosophy of AngularJS, the [ng-suggest
-module](http://gbv.github.io/ng-suggest/) is aimed at providing an easily
-implementable and reusable solution to this problem. It retrieves the
-suggestions of a specified service and, using the [Bootstrap
-UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for
-web applications.
+As is the philosophy of AngularJS, the [ng-suggest module](http://gbv.github.io/ng-suggest/) is aimed at providing an easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the [Bootstrap UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for web applications.
 
 Similar services use other JSON formats, so ng-suggest supports an option to
 map from these to OpenSerach suggestions.
