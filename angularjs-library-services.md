@@ -74,8 +74,7 @@ As one of several frameworks, [AngularJS](https://angularjs.org/) aims to enhanc
 
 ```
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
-
-```
+``` 
 
 The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These "directives" can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket `{{}}` syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (`ng-if` and `ng-repeat`, respectively), which can simply be used as parameters. For example,
 
