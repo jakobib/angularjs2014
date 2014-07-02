@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Jakob Voß" />
+  <meta name="author" content="Moritz Horn" />
+  <meta name="date" content="2014-01-01" />
+  <title>Exposing library services with AngularJS</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Exposing library services with AngularJS</h1>
+<h2 class="author">Jakob Voß</h2>
+<h2 class="author">Moritz Horn</h2>
+<h3 class="date">2014</h3>
+</div>
+<p>This article provides an introduction to the JavaScript framework AngularJS and specific modules for accessing library services.</p>
+<p><strong>THIS IS A DRAFT, CURRENTLY BEING EDITED</strong></p>
+<h1 id="introduction">Introduction</h1>
+<h2 id="motivation">Motivation</h2>
+<p>The demand to open up library systems through web services has been known since years <span class="citation">(Breeding 2009)</span>. In particular service-oriented architecture (SOA), promised to better allow a continuous evolution of library automation and to better connect with external systems. Nevertheless current library systems are rarely build of loosely couples that could be used independently.</p>
+<p>The background of this abidance on monolithical systems must be discussed elsewhere, but one reason might be a lack of motivation to provide library services via open APIs. This article will give some motivation by introducing an easy way how library services, if available in form of APIs, can be exposed, used and integrated into other web applications.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<h2 id="library-services-and-apis">Library services and APIs</h2>
+<p>In general, the services provided by a library or similar institution, should be easy to use by anyone. On the Web, these services are exposed through user interfaces (UI). These interfaces are curated and revised by usability studies and user experience (UX) at best. In other instances the UI is simply judged with common sense by normal library staff and management. Application programming interfaces (APIs), on the other hand, cannot simply be viewed, used, and judged by anyone. Unlike the UI, an API is not a final application to make use of a service, but the basis for creation of service applications: Without APIs, applications are difficult to build and services can only be provided in limited form. Without applications, however, it is difficult to justify the need for an API. How can this vicious circle of missing APIs to library services be broken?</p>
+<p>…</p>
+<p>To give an example, as long as information about current availability of documents was only displayed in local library OPACs there was no motivation to create a public API to query this information. With the need to display availability information in discovery interfaces, the Document Availability Information API (DAIA) was specified and implemented at GBV <span class="citation">(“Document Availability Information API (DAIA)”)</span>. This use case, however, is very limited as both API provider and client application are managed by the same institution. The full benefit of an open API is not revealed until different applications by different parties make use of it.</p>
+<p>…</p>
+<p>This paper will demonstrate a possible strategy to increase visibility and use of library APIs by providing client modules that facilitate the creation of applications by third parties. The modules are based on the JavaScript framework AngularJS which is getting more and more popular among developers of web applications. The general strategy is illustrated in the following diagram:</p>
+<div class="figure">
+<img src="layers.png" alt="getting a library service into a web application" /><p class="caption">getting a library service into a web application</p>
+</div>
+<h1 id="angularjs">AngularJS</h1>
+<p><em>general overview of AngularJS (how it works, strength, alternatives…)</em></p>
+<p>As one of several frameworks, <a href="https://angularjs.org/">AngularJS</a> aims to enhance the functionality of JavaScript, specifically by providing features supporting modularisation and testing. Structurally, the framework is based on “modules”, which contain the server-side logic and have to be included via an HTML <code>&lt;script&gt;</code>-tag.</p>
+<pre><code>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+<p>The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These “directives” can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket <code>{{}}</code> syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (<code>ng-if</code> and <code>ng-repeat</code>, respectively), which can simply be used as parameters. For example,</p>
+<pre><code>&lt;html ng-app=&quot;myApp&quot;&gt;
+
+...
+
+&lt;body ng-controller=&quot;MyController&quot;&gt;
+&lt;script src=&quot;angular.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    angular.module(&#39;myApp&#39;, []);
+    function MyController($scope){
+        $scope.data = [
+            {
+                id: &quot;123&quot;,
+                value: &quot;foo&quot;
+            },
+            {
+                id: &quot;345&quot;,
+                value: &quot;bar&quot;
+            },
+            {
+                value: &quot;text&quot;
+            }
+        ]
+    }
+&lt;/script&gt;
+&lt;ul ng-repeat=&quot;d in data&quot;&gt;
+    &lt;li ng-if=&quot;d.id&quot;&gt;{{d.value}}&lt;/li&gt;
+&lt;/ul&gt;
+
+...
+
+&lt;/html&gt;</code></pre>
+<p>will display every index-item <code>value</code> of the <code>data</code> scope, if the subfield <code>data.id</code> exists for the specific item. So <code>foo</code> and <code>bar</code> would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <a href="http://ngmodules.org/">http://ngmodules.org/</a>.</p>
+<h1 id="examples">Examples</h1>
+<p>The practical inclusion of library services in websites with AngularJS is illustrated with two examples. Both have been implemented as AngularJS modules for easy reuse. First, <strong>ng-suggest</strong> provides access to OpenSearch/SeeAlso Suggestions and second, <strong>ng-daia</strong> provides access to availability information with DAIA. A third example can be found as work in progress at <a href="https://github.com/gbv/ng-skos">https://github.com/gbv/ng-skos</a>. <strong>ng-skos</strong> is a module to interact with authority files and other simple knowledge organisation systems (SKOS).</p>
+<h2 id="embedding-suggestions-with-ng-suggest">Embedding Suggestions with ng-suggest</h2>
+<p>The description for the OpenSearch standard for search engines includes a specification for how to query search suggestions and autocomplete services, as provided by many search applications. The method can also be used to support tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:</p>
+<pre><code>[
+    &quot;hon&quot;,[&quot;Hong Kong&quot;,&quot;Honolulu&quot;,&quot;Honduras&quot;,&quot;Honda&quot;,&quot;Honorary degree&quot;, ...
+]</code></pre>
+<p>Despite the simplicity of this format, making use of it still requires a client library.</p>
+<div class="figure">
+<img src="http://ariadne-media.ukoln.info/grfx/img/issue57-voss/figure-1.jpg" alt="google typeahead" /><p class="caption">google typeahead</p>
+</div>
+<div class="figure">
+<img src="suggest_wikipedia_en.png" alt="ng-suggest using Wikipedia OpenSearch Suggest" /><p class="caption">ng-suggest using Wikipedia OpenSearch Suggest</p>
+</div>
+<p>As is the philosophy of AngularJS, the <a href="http://gbv.github.io/ng-suggest/">ng-suggest module</a> is aimed at providing an easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the <a href="http://angular-ui.github.io/bootstrap/">Bootstrap UI</a>, provides a typeahead function for web applications.</p>
+<p>Similar services use other JSON formats, so ng-suggest supports an option to map from these to OpenSerach suggestions.</p>
+<h2 id="embedding-availability-information-with-ng-daia">Embedding Availability Information with ng-daia</h2>
+<p>The <a href="http://www.gbv.de/wikis/cls/DAIA_-_Document_Availability_Information_API">Document Availability Information API (DAIA)</a> defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites. Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module ng-daia implements client code to execute and process a DAIA query and to display holding information in convenient form. The integration into HTML is exemplarily documented in the following code:</p>
+<pre><code>&lt;html ng-app=&quot;myApp&quot;&gt;
+&lt;head&gt;
+  &lt;script src=&quot;angular.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;ng-daia.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;angular.module(&#39;myApp&#39;, [&#39;ngDAIA&#39;]);&lt;/script&gt;
+  &lt;link href=&quot;ng-daia.css&quot; rel=&quot;stylesheet&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div daia-api=&quot;http://your-daia-base-url&quot; daia-id=&quot;your-document-id&quot;&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>ng-daia is hosted in a public git repository, documented and downloadable at <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of documents in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, <code>daia-simple</code> defines an additional format provided by this module, providing the most preferable status for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as <code>ng-if</code> and <code>ng-repeat</code>. The output using these templates may look like this:</p>
+<div class="figure">
+<img src="ngdaia_demo_EN_full.png" alt="example output of ng-daia with standard templates" /><p class="caption">example output of ng-daia with standard templates</p>
+</div>
+<p>In this example you can see the nested structure of the DAIA data model, which consists of an outer layer for institutional and document information as a whole. The document object contains one or more items, which can be further attributed to departments of the holding institution or a location (e.g. shelf mark). Within each item object, the availability for specific services is enclosed, as well as limitations and further options for those services (such as reserving a currently lent physical copy). The filter <code>daia-simple</code> would in this example return an object with a field <code>status: 'loan'</code>, as loan is currently the most preferable available service. In addition, the templates provide localization capabilities using <a href="http://angular-translate.github.io/">angular-translate</a>. * AngularJS Modules. <a href="http://ngmodules.org/">http://ngmodules.org/</a></p>
+<p>Utilizing this tool will allow website creators to easily embedd either current information concerning a specific document, or providing a way to request availability information from multiple sources.</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>AngularJS modules, such as ng-suggest and ng-daia presented above, provide an easy method to integrate library services in websites and applications. A basic prequisite to support use of a library service, however, is the availability of an HTTP-based API to this service. Despite existing efforts to open library systems (e.g. the <a href="http://old.diglib.org/architectures/ilsdi/">ILS-DI Recommendations</a> and <a href="www.oclc.org/developer/webservices">WorldCat Web Services</a>) the support of standard APIs in library systems is non-satisfying. Apart from search via SRU and resource synchronization via OAI-PMH, most library services are not provided via an API at all, or the API is specific to the underlying library system only, or it is very complex and only available for internal use (e.g. NCIP). The lack of available APIs, however, is not a technical problem but a problem of motivation to specify, implement, provide, and document these APIs. The examples of how to integrate library services in arbitrary web applications, given in this article, may at least add some motivation to provide library services via open APIs.</p>
+<p>Even if AngularJS is or will not be the technology of your choice, the principle illustrated in the initial diagram above makes sense. Libraries should not only expose their services via openly specified APIs but also provide client libraries to facilitate the integration of these services into web applications. To minimize the work of doing so, one should build on standardized APIs instead of (re)inventing new APIs for every library system.</p>
+<p><em>…lessons learned: development of an API and an API client as AngularJS module is fruitful…</em></p>
+<p>Candidates for most missing AngularJS modules to access library services: SRU and/or OpenSearch (see http://dlib.org/dlib/july10/hammond/07hammond.html for a description/example of both).</p>
+<p><em>…If no common API exists, one must specify one… for instance at GBV we are evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)…</em></p>
+<p><em>…some final words…</em></p>
+<div class="references">
+<h1>References</h1>
+<p>Breeding, Marshall. 2009. “Opening up Library Systems Through Web Services and SOA: Hype or Reality?” 8. Vol. 45. Library Technology Reports. American Library Association.</p>
+<p>“Document Availability Information API (DAIA).”</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The motivation is based on the assumption that libraries actually want to facilitate the use of their servics. In some cases this assumption might be wrong.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+</body>
+</html>

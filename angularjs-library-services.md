@@ -79,14 +79,40 @@ As one of several frameworks, [AngularJS](https://angularjs.org/) aims to enhanc
 The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These "directives" can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket `{{}}` syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (`ng-if` and `ng-repeat`, respectively), which can simply be used as parameters. For example,
 
 ```
+<html ng-app="myApp">
+
+...
+
+<body ng-controller="MyController">
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp', []);
+    function MyController($scope){
+        $scope.data = [
+            {
+                id: "123",
+                value: "foo"
+            },
+            {
+                id: "345",
+                value: "bar"
+            },
+            {
+                value: "text"
+            }
+        ]
+    }
+</script>
 <ul ng-repeat="d in data">
     <li ng-if="d.id">{{d.value}}</li>
 </ul>
+
+...
+
+</html>
 ```
 
-will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <http://ngmodules.org/>.
-
-...aka widgets...to build applications...
+will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. So `foo` and `bar` would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <http://ngmodules.org/>.
 
 # Examples
 
@@ -94,16 +120,15 @@ The practical inclusion of library services in websites with AngularJS is
 illustrated with two examples. Both have been implemented as AngularJS modules
 for easy reuse. First, **ng-suggest** provides access to OpenSearch/SeeAlso
 Suggestions and second, **ng-daia** provides access to availability information
-with DAIA. A third example can be found as work in progress at with
-**ng-skos**, a module to interact with authority files and other simple
-knowledge organisation systems (SKOS). *TODO: link*
+with DAIA. A third example can be found as work in progress at <https://github.com/gbv/ng-skos>. **ng-skos** is a module to interact with authority files and other simple
+knowledge organisation systems (SKOS).
 
 ## Embedding Suggestions with ng-suggest
 
 The description for the OpenSearch standard for search engines includes a specification for how to query search suggestions and autocomplete services, as provided by many search applications. The method can also be used to support tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:
 
     [
-        "hon",["Hong Kong","Honolulu","Honduras","Honda","Honorary degree","Honshu","Honey","Honourable East India Company","Hong Kong Island","Honda in Formula One"]
+        "hon",["Hong Kong","Honolulu","Honduras","Honda","Honorary degree", ...
     ]
 
 Despite the simplicity of this format, making use of it still requires a client
