@@ -38,10 +38,7 @@
 <pre><code>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js&quot;&gt;&lt;/script&gt;</code></pre>
 <p>The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These “directives” can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket <code>{{}}</code> syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (<code>ng-if</code> and <code>ng-repeat</code>, respectively), which can simply be used as parameters. For example,</p>
 <pre><code>&lt;html ng-app=&quot;myApp&quot;&gt;
-
-...
-
-&lt;body ng-controller=&quot;MyController&quot;&gt;
+&lt;head&gt;
 &lt;script src=&quot;angular.min.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
     angular.module(&#39;myApp&#39;, []);
@@ -61,12 +58,14 @@
         ]
     }
 &lt;/script&gt;
-&lt;ul ng-repeat=&quot;d in data&quot;&gt;
-    &lt;li ng-if=&quot;d.id&quot;&gt;{{d.value}}&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/head&gt;
+&lt;body ng-controller=&quot;MyController&quot;&gt;
+
+    &lt;ul ng-repeat=&quot;d in data&quot;&gt;
+        &lt;li ng-if=&quot;d.id&quot;&gt;{{d.value}}&lt;/li&gt;
+    &lt;/ul&gt;
 
 ...
-
 &lt;/html&gt;</code></pre>
 <p>will display every index-item <code>value</code> of the <code>data</code> scope, if the subfield <code>data.id</code> exists for the specific item. So <code>foo</code> and <code>bar</code> would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <a href="http://ngmodules.org/">http://ngmodules.org/</a>.</p>
 <h1 id="examples">Examples</h1>
@@ -103,7 +102,7 @@
 <div class="figure">
 <img src="ngdaia_demo_EN_full.png" alt="example output of ng-daia with standard templates" /><p class="caption">example output of ng-daia with standard templates</p>
 </div>
-<p>In this example you can see the nested structure of the DAIA data model, which consists of an outer layer for institutional and document information as a whole. The document object contains one or more items, which can be further attributed to departments of the holding institution or a location (e.g. shelf mark). Within each item object, the availability for specific services is enclosed, as well as limitations and further options for those services (such as reserving a currently lent physical copy). The filter <code>daia-simple</code> would in this example return an object with a field <code>status: 'loan'</code>, as loan is currently the most preferable available service. In addition, the templates provide localization capabilities using <a href="http://angular-translate.github.io/">angular-translate</a>. * AngularJS Modules. <a href="http://ngmodules.org/">http://ngmodules.org/</a></p>
+<p>In this example you can see the nested structure of the DAIA data model, which consists of an outer layer for institutional and document information as a whole. The document object contains one or more items, which can be further attributed to departments of the holding institution or a location (e.g. shelf mark). Within each item object, the availability for specific services is enclosed, as well as limitations and further options for those services (such as reserving a currently lent physical copy). The filter <code>daia-simple</code> would in this example return an object with a field <code>status: 'loan'</code>, as loan is currently the most preferable available service. In addition, the templates provide localization capabilities using <a href="http://angular-translate.github.io/">angular-translate</a>.</p>
 <p>Utilizing this tool will allow website creators to easily embedd either current information concerning a specific document, or providing a way to request availability information from multiple sources.</p>
 <h1 id="conclusions">Conclusions</h1>
 <p>AngularJS modules, such as ng-suggest and ng-daia presented above, provide an easy method to integrate library services in websites and applications. A basic prequisite to support use of a library service, however, is the availability of an HTTP-based API to this service. Despite existing efforts to open library systems (e.g. the <a href="http://old.diglib.org/architectures/ilsdi/">ILS-DI Recommendations</a> and <a href="www.oclc.org/developer/webservices">WorldCat Web Services</a>) the support of standard APIs in library systems is non-satisfying. Apart from search via SRU and resource synchronization via OAI-PMH, most library services are not provided via an API at all, or the API is specific to the underlying library system only, or it is very complex and only available for internal use (e.g. NCIP). The lack of available APIs, however, is not a technical problem but a problem of motivation to specify, implement, provide, and document these APIs. The examples of how to integrate library services in arbitrary web applications, given in this article, may at least add some motivation to provide library services via open APIs.</p>

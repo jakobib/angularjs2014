@@ -80,10 +80,7 @@ The first tool for facilitating usability is the promotion of discrete submodule
 
 ```
 <html ng-app="myApp">
-
-...
-
-<body ng-controller="MyController">
+<head>
 <script src="angular.min.js"></script>
 <script>
     angular.module('myApp', []);
@@ -103,12 +100,14 @@ The first tool for facilitating usability is the promotion of discrete submodule
         ]
     }
 </script>
-<ul ng-repeat="d in data">
-    <li ng-if="d.id">{{d.value}}</li>
-</ul>
+</head>
+<body ng-controller="MyController">
+
+    <ul ng-repeat="d in data">
+        <li ng-if="d.id">{{d.value}}</li>
+    </ul>
 
 ...
-
 </html>
 ```
 
@@ -199,7 +198,6 @@ this example return an object with a field `status: 'loan'`, as loan is
 currently the most preferable available service. In addition, the templates
 provide localization capabilities using
 [angular-translate](http://angular-translate.github.io/).
-* AngularJS Modules. <http://ngmodules.org/>
 
 Utilizing this tool will allow website creators to easily embedd either current
 information concerning a specific document, or providing a way to request
