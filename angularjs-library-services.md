@@ -49,32 +49,39 @@ availability of documents held by the library. As long as information about
 current availability was only displayed in local library OPACs there was little
 motivation to create a public API. With the need to display availability
 information in discovery interfaces such as VuFind, the Document Availability 
-Information API (DAIA) was specified and implemented at GBV [@DAIA]. But little
-interest was shown by other libraries and system vendors as long as they did
-not require the API for internal use. The full benefit of an open API is not 
+Information API ([DAIA]) was specified and implemented at GBV [@DAIA]. But 
+little interest was shown by other libraries and system vendors as long as they 
+did not require the API for internal use. The full benefit of an open API is not 
 revealed until different applications by different parties make use of it. This
-article will demonstrate a possible strategy to increase visibility and 
-use of library APIs by providing client modules that facilitate the creation
-of applications by third parties. The modules are based on the JavaScript
+article will demonstrate a possible strategy to increase visibility and use of 
+library APIs by providing client modules that facilitate the creation of 
+applications by third parties. The modules are based on the JavaScript 
 framework AngularJS which is getting more and more popular among developers
 of web applications. The general strategy is illustrated in the following
 diagram:
 
 ![From library service to web application](layers.png)
 
+[DAIA]: http://purl.org/NET/DAIA
+[AngularJS]: https://angularjs.org/
+
 # AngularJS
 
-Similar to
+[AngularJS] is a web application framework based on JavaScript and HTML. 
+AngularJS aims to enhance the functionality of JavaScript, specifically by 
+providing features supporting modularisation and testing. Structurally, the 
+framework is based on "modules", which contain the application logic and have
+to be included via an HTML `<script>`-tag.
 
 *general overview of AngularJS (how it works, strength, alternatives...)*
-
-As one of several frameworks, [AngularJS](https://angularjs.org/) aims to enhance the functionality of JavaScript, specifically by providing features supporting modularisation and testing. Structurally, the framework is based on "modules", which contain the server-side logic and have to be included via an HTML `<script>`-tag.
 
 ```
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
 ``` 
 
-The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These "directives" can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket `{{}}` syntax to this end). Furthermore, AngularJS provides modules for including basic programming syntax into HTML, like if-prompts or loops (`ng-if` and `ng-repeat`, respectively), which can simply be used as parameters. For example,
+The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These "directives" can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket `{{}}` syntax to this end). Furthermore, AngularJS provides methods for including basic programming syntax into HTML, like conditionals and loops (`ng-if` and `ng-repeat`, respectively), which can simply be used as HTML attributes.
+
+For example,
 
 ```
 <html ng-app="myApp">
@@ -99,7 +106,7 @@ The first tool for facilitating usability is the promotion of discrete submodule
 </html>
 ```
 
-will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. So `foo` and `bar` would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <http://ngmodules.org/>.
+will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. So `foo` and `bar` would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. Many useful modules can be found at <http://ngmodules.org/>.
 
 # Modules for embedding library services
 
@@ -108,10 +115,6 @@ illustrated in the following with two examples. Both are available as AngularJS
 modules for easy reuse: the ng-suggest module provides access to search 
 suggestions and links [@ngsuggest] and the ng-daia module provides access to
 availability information [@ngdaia].
-
-
-A third example can be found as work in progress at <https://github.com/gbv/ng-skos>. **ng-skos** is a module to interact with authority files and other simple
-knowledge organisation systems (SKOS).
 
 ## Suggestions with ng-suggest
 
@@ -150,9 +153,7 @@ publications), and different JSON response formats can be mapped.
 
 ## Availability with ng-daia
 
-The [Document Availability Information API
-(DAIA)](http://www.gbv.de/wikis/cls/DAIA_-_Document_Availability_Information_API)
-defines a data model and an HTTP API for accessing information about the
+DAIA defines a data model and an HTTP API for accessing information about the
 current availability of documents. Its aim is to provide a way for libraries to
 allow open and easy-to-use access to holding information from their catalogs.
 This, in turn, enables the inclusion of document availability information in
@@ -250,6 +251,9 @@ evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)...
 ---
 
 *Notes maybe to include in the article text:*
+
+A third example can be found as work in progress at <https://github.com/gbv/ng-skos>. **ng-skos** is a module to interact with authority files and other simple
+knowledge organisation systems (SKOS).
 
 As is the philosophy of AngularJS easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the [Bootstrap UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for web applications.
 
