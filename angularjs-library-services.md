@@ -3,13 +3,15 @@ title: Exposing library services with AngularJS
 author:
     - Jakob Voß
     - Moritz Horn
-date: 2014
+date: 2014-07-11
+nocite: |
+    @ngmodules, @Voss2008
 ...
 
 This article provides an introduction to the JavaScript framework AngularJS and
-specific modules for accessing library services.
-
-**THIS IS A DRAFT, CURRENTLY BEING EDITED**
+specific AngularJS modules for accessing library services. It is shown how
+services such as search suggestions, additional links, and availability
+information can be embedded in any website.
 
 # Introduction
 
@@ -19,7 +21,7 @@ The demand to open up library systems through web services has been known since
 years [@Breeding2009]. In particular service-oriented architecture (SOA),
 promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
-rarely build of loosely couples that could be used independently.
+rarely build of loosely coupled parts that could be used independently.
 
 The background of this abidance on monolithical systems must be discussed
 elsewhere, but one reason might be a lack of motivation to provide library

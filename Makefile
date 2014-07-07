@@ -6,4 +6,4 @@ ifeq ($(PANDOC),)
 endif
 
 $(NAME).html: $(NAME).md $(NAME).bib
-	$(PANDOC) -s -S $< -o $@ --bibliography $(NAME).bib
+	$(PANDOC) -s -S $< -o $@ --bibliography $(NAME).bib --css code4lib.css
