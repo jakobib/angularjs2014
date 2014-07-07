@@ -5,70 +5,66 @@ author:
     - Moritz Horn
 date: 2014-07-11
 nocite: |
-    @ngmodules, @Voss2008
+    @ngmodules
 ...
 
 This article provides an introduction to the JavaScript framework AngularJS and
-specific AngularJS modules for accessing library services. It is shown how
-services such as search suggestions, additional links, and availability
-information can be embedded in any website.
+specific AngularJS modules for accessing library services. It shows how
+information such as search suggestions, additional links, and availability
+can be embedded in any website. The ease of reuse may encourage more libraries
+to expose their services via standard APIs to allow usage in different context.
 
 # Introduction
 
-## Motivation
-
 The demand to open up library systems through web services has been known since
-years [@Breeding2009]. In particular service-oriented architecture (SOA),
+years [@Breeding2009]. In particular service-oriented architecture (SOA)
 promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
 rarely build of loosely coupled parts that could be used independently.
-
 The background of this abidance on monolithical systems must be discussed
-elsewhere, but one reason might be a lack of motivation to provide library
-services via open APIs. This article will give some motivation by introducing
-an easy way how library services, if available in form of APIs, can be exposed,
-used and integrated into other web applications.^[The motivation is based on
-the assumption that libraries actually want to facilitate the use of their
-servics. In some cases this assumption might be wrong.]
+elsewhere. One reason might be a lack of motivation to provide library
+services via open APIs.
 
 ## Library services and APIs
 
-In general, the services provided by a library or similar institution, should
-be easy to use by anyone. On the Web, these services are exposed through user
-interfaces (UI). These interfaces are curated and revised by usability studies
+Services provided by a library or similar institution should be easy to use by 
+anyone and in any form. Most services, however, can only be used in the fixed
+context of a particular user interface. If a service can be accessed via
+application programming interface (API), it can also be integrated and used
+in other applications. Nevertheless there is a lack of motivation to expose
+services via open APIs.
+
+User interfaces are curated and revised by usability studies
 and user experience (UX) at best. In other instances the UI is simply judged
-with common sense by normal library staff and management. Application
-programming interfaces (APIs), on the other hand, cannot simply be viewed,
+with common sense by normal library staff and management. 
+APIs on the other hand, cannot simply be viewed,
 used, and judged by anyone. Unlike the UI, an API is not a final application to
 make use of a service, but the basis for creation of service applications:
 Without APIs, applications are difficult to build and services can only be
 provided in limited form. Without applications, however, it is difficult to
-justify the need for an API. How can this vicious circle of missing APIs to
-library services be broken?
+justify the need for an API.
 
-...
-
-To give an example, as long as information about current availability of 
-documents was only displayed in local library OPACs there was no motivation
-to create a public API to query this information. With the need to display
-availability information in discovery interfaces, the Document Availability 
-Information API (DAIA) was specified and implemented at GBV [@DAIA]. This
-use case, however, is very limited as both API provider and client application
-are managed by the same institution. The full benefit of an open API is not 
-revealed until different applications by different parties make use of it.
-
-...
-
-This paper will demonstrate a possible strategy to increase visibility and 
+To give an example, most library systems lack an API to query current 
+availability of documents held by the library. As long as information about 
+current availability was only displayed in local library OPACs there was little
+motivation to create a public API. With the need to display availability
+information in discovery interfaces such as VuFind, the Document Availability 
+Information API (DAIA) was specified and implemented at GBV [@DAIA]. But little
+interest was shown by other libraries and system vendors as long as they did
+not require the API for internal use. The full benefit of an open API is not 
+revealed until different applications by different parties make use of it. This
+article will demonstrate a possible strategy to increase visibility and 
 use of library APIs by providing client modules that facilitate the creation
 of applications by third parties. The modules are based on the JavaScript
 framework AngularJS which is getting more and more popular among developers
 of web applications. The general strategy is illustrated in the following
 diagram:
 
-![getting a library service into a web application](layers.png)
+![From library service to web application](layers.png)
 
 # AngularJS
+
+Similar to
 
 *general overview of AngularJS (how it works, strength, alternatives...)*
 
@@ -88,63 +84,71 @@ The first tool for facilitating usability is the promotion of discrete submodule
     angular.module('myApp', []);
     function MyController($scope){
         $scope.data = [
-            {
-                id: "123",
-                value: "foo"
-            },
-            {
-                id: "345",
-                value: "bar"
-            },
-            {
-                value: "text"
-            }
+            { id: "123", value: "foo" },
+            { id: "345", value: "bar" },
+            { value: "text" }
         ]
     }
 </script>
 </head>
 <body ng-controller="MyController">
-
     <ul ng-repeat="d in data">
         <li ng-if="d.id">{{d.value}}</li>
     </ul>
-
-...
+    ...
 </html>
 ```
 
 will display every index-item `value` of the `data` scope, if the subfield `data.id` exists for the specific item. So `foo` and `bar` would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. A lot of useful modules can be found at <http://ngmodules.org/>.
 
-# Examples
+# Modules for embedding library services
 
-The practical inclusion of library services in websites with AngularJS is
-illustrated with two examples. Both have been implemented as AngularJS modules
-for easy reuse. First, **ng-suggest** provides access to OpenSearch/SeeAlso
-Suggestions and second, **ng-daia** provides access to availability information
-with DAIA. A third example can be found as work in progress at <https://github.com/gbv/ng-skos>. **ng-skos** is a module to interact with authority files and other simple
+The practical embedding of library services in websites with AngularJS is
+illustrated in the following with two examples. Both are available as AngularJS
+modules for easy reuse: the ng-suggest module provides access to search 
+suggestions and links [@ngsuggest] and the ng-daia module provides access to
+availability information [@ngdaia].
+
+
+A third example can be found as work in progress at <https://github.com/gbv/ng-skos>. **ng-skos** is a module to interact with authority files and other simple
 knowledge organisation systems (SKOS).
 
-## Embedding Suggestions with ng-suggest
+## Suggestions with ng-suggest
 
-The description for the OpenSearch standard for search engines includes a specification for how to query search suggestions and autocomplete services, as provided by many search applications. The method can also be used to support tagging with controlled vocabularies (Nagaya et al. 2011) or by recommendation services to dynamically display additional information (Voß 2008). A search suggestion, as specified by OpenSearch Suggestions (Clinton 2006) consists of a JSON array:
+The OpenSearch standard for search engines includes a specification for how to 
+query search suggestions and autocomplete services via HTTP [@Clinton2006].
+Suggestion services are provided by many search applications as "typeahead".
+The method can also be used for instance by recommendation services [@Voss2008] 
+and to support support tagging with controlled vocabularies [@Nagaya2011].
+
+![Typeahead via OpenSearch Suggestions](typeahead.jpg)
+
+The OpenSearch Suggestions specification defines a query response as JSON array
+with at least two elements (query string and a list of search completions):
 
     [
-        "hon",["Hong Kong","Honolulu","Honduras","Honda","Honorary degree", ...
+        "Moz",
+        ["mozilla","mozilla firefox","mozart","mozilla thunderbird",...]
     ]
 
-Despite the simplicity of this format, making use of it still requires a client
-library.
+Optional elements can include descriptions and URLs for each search completion.
+While processing of this simple format is not very complex, it still requires
+JavaScript skills to make use of a suggestion service. ng-suggest simplifies
+the embedding to two HTML statements. The following example enriches an input
+form with typeahead from Wikipedia as depicted in the figure below:
 
-![google typeahead](http://ariadne-media.ukoln.info/grfx/img/issue57-voss/figure-1.jpg)
+```
+TODO (HTML to reproduce the image)
+```
 
-![ng-suggest using Wikipedia OpenSearch Suggest](suggest_wikipedia_en.png)
+![Suggest Wikipedia articles with ng-suggest](suggest_wikipedia_en.png)
 
-As is the philosophy of AngularJS, the [ng-suggest module](http://gbv.github.io/ng-suggest/) is aimed at providing an easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the [Bootstrap UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for web applications.
+Similar suggestions can be provided for any Open Search Suggestions service
+by just changing the service's base URL. Among other features, responses can be
+embedded as simple lists (for instance related documents and related 
+publications), and different JSON response formats can be mapped.
 
-Similar services use other JSON formats, so ng-suggest supports an option to
-map from these to OpenSerach suggestions.
-
-## Embedding Availability Information with ng-daia
+## Availability with ng-daia
 
 The [Document Availability Information API
 (DAIA)](http://www.gbv.de/wikis/cls/DAIA_-_Document_Availability_Information_API)
@@ -242,5 +246,22 @@ description/example of both).
 evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)...*
 
 *...some final words...*
+
+---
+
+*Notes maybe to include in the article text:*
+
+As is the philosophy of AngularJS easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the [Bootstrap UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for web applications.
+
+How can the vicious circle of missing APIs to library services be broken?
+
+(this article is based on
+the assumption that libraries actually want to facilitate the use of their
+servics. In some cases this assumption might be wrong).
+
+an easy way how library services, if available in form of APIs, 
+can be exposed, used and integrated into other web applications.
+
+---
 
 # References
