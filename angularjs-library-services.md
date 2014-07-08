@@ -137,8 +137,8 @@ with at least two elements (query string and a list of search completions):
 Optional elements can include descriptions and URLs for each search completion.
 While processing of this simple format is not very complex, it still requires
 JavaScript skills to make use of a suggestion service. ng-suggest simplifies
-the embedding to two HTML statements. The following example enriches an input
-form with typeahead from Wikipedia as depicted in the figure below:
+the embedding to two HTML statements. The following example code adds Wikipedia typeahead features to an input
+form element:
 
 ```
     <html ng-app="myApp">
@@ -175,6 +175,7 @@ form with typeahead from Wikipedia as depicted in the figure below:
     </body>
     </html>
 ```
+This piece of HTML will result in a fully fledged wikipedia search bar with typeahead, looking like this:
 
 ![Suggest Wikipedia articles with ng-suggest](suggest_wikipedia_en.png)
 
