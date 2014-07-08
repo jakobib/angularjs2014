@@ -1,0 +1,23 @@
+<html ng-app="myApp">
+ <head>
+  <script src="angular.min.js"></script>
+  <script>
+    angular.module('myApp', []);
+    function MyController($scope) {
+      $scope.books = [
+        { title: "One Thousand and One Nights" },
+        { title: "Where the Wild Things Are", author: "Sendak" },
+        { title: "The Hobbit", author: "Tolkien" },
+      ];
+    }
+  </script>
+ </head>
+ <body ng-controller="MyController">
+  <ul ng-repeat="b in books | orderBy:'title'">
+   <li>
+    <i>{{b.title}}</i>
+    <span ng-if="b.author">by {{b.author}}</span>
+   </li>
+  </ul>
+ </body>
+</html>

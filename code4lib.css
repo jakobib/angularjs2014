@@ -68,7 +68,11 @@ h2.author, h3.date {
   border: none;
 }
 
-.caption { text-align: center; }
+.figure { text-align: center; counter-increment: figures; }
+.caption:before {
+    content: 'Figure ' counter(figures) ': ';
+    font-weight: bold;
+}
 
 pre {
   background-color: #EEEEEE;
