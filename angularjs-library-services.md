@@ -141,7 +141,39 @@ the embedding to two HTML statements. The following example enriches an input
 form with typeahead from Wikipedia as depicted in the figure below:
 
 ```
-TODO (HTML to reproduce the image)
+    <html ng-app="myApp">
+    <link href="..lib/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="..lib/angular.min.js"></script>
+    <script src="..lib/angular-sanitize.min.js"></script>
+    <script src="..lib/ui-bootstrap.min.js"></script>
+    <script src="..lib/ui-bootstrap-tpls.js"></script>
+    <script src="../src/ng-suggest.min.js"></script>
+    ...
+    <body ng-controller="myController">
+    <script>
+    angular.module('myApp', ['ui.bootstrap','ngSuggest']);
+    function myController($scope){
+        $scope.example = { 
+            api: "https://en.wikipedia.org/w/api.php?action=opensearch&limit=10&namespace=0&format=json&search=",
+            input: "",
+            item: ""
+        };
+        $scope.example.onSelect = function(item){
+            $scope.example.item = item;
+        };
+    };
+    </script>
+    <input style="width:400px" class="form-control"
+        typeahead-on-select="example.onSelect($item)"
+        ng-model="example.input"
+        suggest-typeahead="example.api" jsonp=1
+        placeholder="Search Wikipedia"
+    />
+    
+    ...
+    
+    </body>
+    </html>
 ```
 
 ![Suggest Wikipedia articles with ng-suggest](suggest_wikipedia_en.png)
