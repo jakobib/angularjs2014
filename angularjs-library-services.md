@@ -67,14 +67,6 @@ diagram:
 
 # AngularJS
 
-* expressions and templates (logic features of AngularJS such as `ng-if` and `ng-repeat`)
-* separation of logic/view layer
-* separated scopes and two-way data-binding (`{{variable}}`)
-
-
-...aka widgets...to build applications...
-
-
 [AngularJS] is a web application framework that aims to enhance the
 functionality of JavaScript. The framework is designed to support
 modularization on multiple levels. Functionality of applications is broken into
@@ -131,8 +123,8 @@ variable "books" of a given scope. The controller is later used in the HTML
 body to display a sorted list of books with an HTML template. The template
 makes use of standard AngularJS directives (`ng-repeat`, `ng-if`) and
 expressions (`| orderBy:'title'`, `b.title`, `b.author`). The application logic
-to create such a list could also be packed in a new directive to be used at
-multiple places.
+to create such a list could also be packed in a new directive to be used as
+"widget" at multiple places.
 
 # Modules for embedding library services
 
@@ -177,24 +169,21 @@ form element:
     <script>
     angular.module('myApp', ['ui.bootstrap','ngSuggest']);
     function MyController($scope){
-        $scope.example = { 
-            api: "https://en.wikipedia.org/w/api.php?action=opensearch&limit=10&namespace=0&format=json&search=",
-            input: "",
-            item: ""
-        };
-        $scope.example.onSelect = function(item){
-            $scope.example.item = item;
+        $scope.api = 
+            "https://en.wikipedia.org/w/api.php?action=opensearch&limit=10&namespace=0&format=json&search=",
+        $scope.selectItem = function(item) {
+            $scope.item = item;
         };
     };
     </script>
     <body ng-controller="MyController">
     <input style="width:400px" class="form-control"
-        typeahead-on-select="example.onSelect($item)"
-        ng-model="example.input"
-        suggest-typeahead="example.api" jsonp=1
+        typeahead-on-select="selectItem($item)"
+        ng-model="input"
+        suggest-typeahead="api" jsonp=1
         placeholder="Search Wikipedia"
     />
-    
+    {{item}}
     ...
     
   </body>
@@ -224,16 +213,17 @@ The integration into HTML is exemplarily documented in the following code:
 
 ```{.html}
 <html ng-app="myApp">
-<head>
+ <head>
   <script src="angular.min.js"></script>
   <script src="ng-daia.min.js"></script>
   <script>angular.module('myApp', ['ngDAIA']);</script>
   <link href="ng-daia.css" rel="stylesheet" />
-</head>
-<body>
-  <div daia-api="http://your-daia-base-url" daia-id="your-document-id">
+ </head>
+ <body>
+  <div daia-api="http://your-daia-base-url" 
+       daia-id="your-document-id">
   </div>
-</body>
+ </body>
 </html>
 ```
 
