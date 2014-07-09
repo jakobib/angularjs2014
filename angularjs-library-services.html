@@ -9,6 +9,25 @@
   <meta name="date" content="2014-07-11" />
   <title>Exposing library services with AngularJS</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
   <link rel="stylesheet" href="code4lib.css" type="text/css" />
 </head>
 <body>
@@ -29,32 +48,33 @@
 <img src="layers.png" alt="From library service to web application" /><p class="caption">From library service to web application</p>
 </div>
 <h1 id="angularjs">AngularJS</h1>
-<p><a href="https://angularjs.org/">AngularJS</a> is a web application framework based on JavaScript and HTML. AngularJS aims to enhance the functionality of JavaScript, specifically by providing features supporting modularisation and testing. Structurally, the framework is based on “modules”, which contain the application logic and have to be included via an HTML <code>&lt;script&gt;</code>-tag.</p>
-<p><em>general overview of AngularJS (how it works, strength, alternatives…)</em></p>
-<pre><code>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js&quot;&gt;&lt;/script&gt;</code></pre>
-<p>The first tool for facilitating usability is the promotion of discrete submodules, in which different behaviors can be defined seperately of each other. These “directives” can then be easily reused on their own in different applications. They are also a tool for seperating server side logic from client views, accomplished through a practical template solution. AngularJS supports the inclusion of html-code via those templates, which can be assigned unique scopes - again to promote the reduction of dependencies. Combined with this functionality, the framework provides built-in two-way data binding. This in turn adds a lot of options for HTML coding, like the possibility to display variable values, automatically updated during runtime (Angular provides its curly bracket <code>{{}}</code> syntax to this end). Furthermore, AngularJS provides methods for including basic programming syntax into HTML, like conditionals and loops (<code>ng-if</code> and <code>ng-repeat</code>, respectively), which can simply be used as HTML attributes.</p>
-<p>For example,</p>
-<pre><code>&lt;html ng-app=&quot;myApp&quot;&gt;
-&lt;head&gt;
-&lt;script src=&quot;angular.min.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-    angular.module(&#39;myApp&#39;, []);
-    function MyController($scope){
-        $scope.data = [
-            { id: &quot;123&quot;, value: &quot;foo&quot; },
-            { id: &quot;345&quot;, value: &quot;bar&quot; },
-            { value: &quot;text&quot; }
-        ]
+<p><a href="https://angularjs.org/">AngularJS</a> is a web application framework that aims to enhance the functionality of JavaScript. The framework is designed to support modularization on multiple levels. Functionality of applications is broken into parts that can be tested and reused independently.</p>
+<p>Application logic is first grouped in <em>modules</em>, each included with an HTML <code>&lt;script&gt;</code> tag. Some popular modules are listed at the inofficial directory <a href="http://ngmodules.org/">http://ngmodules.org/</a>. Modules may build on each other and define <em>directives</em>. These directives can be used in form of custom HTML tags and attributes (“declarative HTML”). The core AngularJS module contains directives for basic programming syntax in HTML, such as conditionals (<code>ng-if</code>) and loops (<code>ng-repeat</code>), among others. This extension of HTML is further enriched to a a template syntax with AngularJS <em>expressions</em> written in curly brackets (<code>{{}}</code>). The most common use of these expression is to dynamically display variables in HTML templates. In contrast to most other template systems, variables are bound two-way: the display is updated automatically when a variable is changed, and changes of the HTML document (e.g. by input forms) are reflected in the JavaScript variables. Part of modularization, variables are limited to <em>scopes</em> that act like namespaces in other programming languages.</p>
+<p>The following example illustrates the use of AngularJS with scope variables, templates, and directives:<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> ng-app=</span><span class="st">&quot;myApp&quot;</span><span class="kw">&gt;</span>
+ <span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script&gt;</span>
+<span class="er">    angular.module(&#39;myApp&#39;, []);</span>
+<span class="er">    function MyController($scope) {</span>
+      <span class="ot">$scope</span>.<span class="fu">books</span> = [
+        { <span class="dt">title</span>: <span class="st">&quot;One Thousand and One Nights&quot;</span> },
+        { <span class="dt">title</span>: <span class="st">&quot;Where the Wild Things Are&quot;</span>, <span class="dt">author</span>: <span class="st">&quot;Sendak&quot;</span> },
+        { <span class="dt">title</span>: <span class="st">&quot;The Hobbit&quot;</span>, <span class="dt">author</span>: <span class="st">&quot;Tolkien&quot;</span> },
+      ];
     }
-&lt;/script&gt;
-&lt;/head&gt;
-&lt;body ng-controller=&quot;MyController&quot;&gt;
-    &lt;ul ng-repeat=&quot;d in data&quot;&gt;
-        &lt;li ng-if=&quot;d.id&quot;&gt;{{d.value}}&lt;/li&gt;
-    &lt;/ul&gt;
-    ...
-&lt;/html&gt;</code></pre>
-<p>will display every index-item <code>value</code> of the <code>data</code> scope, if the subfield <code>data.id</code> exists for the specific item. So <code>foo</code> and <code>bar</code> would be added to the list. Combined with the option to reuse other prebuilt modules, this greatly enriches the possibilities of DOM-manipulation. Many useful modules can be found at <a href="http://ngmodules.org/">http://ngmodules.org/</a>.</p>
+  <span class="kw">&lt;/script&gt;</span>
+ <span class="kw">&lt;/head&gt;</span>
+ <span class="kw">&lt;body</span><span class="ot"> ng-controller=</span><span class="st">&quot;MyController&quot;</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;ul</span><span class="ot"> ng-repeat=</span><span class="st">&quot;b in books | orderBy:&#39;title&#39;&quot;</span><span class="kw">&gt;</span>
+   <span class="kw">&lt;li&gt;</span>
+    <span class="kw">&lt;i&gt;</span>{{b.title}}<span class="kw">&lt;/i&gt;</span>
+    <span class="kw">&lt;span</span><span class="ot"> ng-if=</span><span class="st">&quot;b.author&quot;</span><span class="kw">&gt;</span>by {{b.author}}<span class="kw">&lt;/span&gt;</span>
+   <span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;/ul&gt;</span>
+ <span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></code></pre>
+<p>The example consists of an application module “myApp”. This module defines a controller “MyController” to set a list of three bibliographic items in the variable “books” of a given scope. The controller is later used in the HTML body to display a sorted list of books with an HTML template. The template makes use of standard AngularJS directives (<code>ng-repeat</code>, <code>ng-if</code>) and expressions (<code>| orderBy:'title'</code>, <code>b.title</code>, <code>b.author</code>). The application logic to create such a list could also be packed in a new directive to be used as “widget” at multiple places.</p>
 <h1 id="modules-for-embedding-library-services">Modules for embedding library services</h1>
 <p>The practical embedding of library services in websites with AngularJS is illustrated in the following with two examples. Both are available as AngularJS modules for easy reuse: the ng-suggest module provides access to search suggestions and links <span class="citation">(“Ng-Suggest” 2014)</span> and the ng-daia module provides access to availability information <span class="citation">(Voß and Horn 2014)</span>.</p>
 <h2 id="suggestions-with-ng-suggest">Suggestions with ng-suggest</h2>
@@ -67,40 +87,36 @@
     &quot;Moz&quot;,
     [&quot;mozilla&quot;,&quot;mozilla firefox&quot;,&quot;mozart&quot;,&quot;mozilla thunderbird&quot;,...]
 ]</code></pre>
-<p>Optional elements can include descriptions and URLs for each search completion. While processing of this simple format is not very complex, it still requires JavaScript skills to make use of a suggestion service. ng-suggest simplifies the embedding to two HTML statements. The following example enriches an input form with typeahead from Wikipedia as depicted in the figure below:</p>
-<pre><code>    &lt;html ng-app=&quot;myApp&quot;&gt;
-    &lt;link href=&quot;..lib/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot; /&gt;
-    &lt;script src=&quot;..lib/angular.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;..lib/angular-sanitize.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;..lib/ui-bootstrap.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;..lib/ui-bootstrap-tpls.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;../src/ng-suggest.min.js&quot;&gt;&lt;/script&gt;
-    ...
-    &lt;body ng-controller=&quot;myController&quot;&gt;
-    &lt;script&gt;
-    angular.module(&#39;myApp&#39;, [&#39;ui.bootstrap&#39;,&#39;ngSuggest&#39;]);
-    function myController($scope){
-        $scope.example = { 
-            api: &quot;https://en.wikipedia.org/w/api.php?action=opensearch&amp;limit=10&amp;namespace=0&amp;format=json&amp;search=&quot;,
-            input: &quot;&quot;,
-            item: &quot;&quot;
-        };
-        $scope.example.onSelect = function(item){
-            $scope.example.item = item;
+<p>Optional elements can include descriptions and URLs for each search completion. While processing of this simple format is not very complex, it still requires JavaScript skills to make use of a suggestion service. ng-suggest simplifies the embedding to two HTML statements. The following example code adds Wikipedia typeahead features to an input form element:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> ng-app=</span><span class="st">&quot;myApp&quot;</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;link</span><span class="ot"> href=</span><span class="st">&quot;.bootstrap.min.css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span>
+    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular-sanitize.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ui-bootstrap.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ui-bootstrap-tpls.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ng-suggest.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+    <span class="kw">&lt;script&gt;</span>
+<span class="er">    angular.module(&#39;myApp&#39;, [&#39;ui.bootstrap&#39;,&#39;ngSuggest&#39;]);</span>
+<span class="er">    function MyController($scope){</span>
+        <span class="ot">$scope</span>.<span class="fu">api</span> = 
+            <span class="st">&quot;https://en.wikipedia.org/w/api.php?action=opensearch&amp;limit=10&amp;namespace=0&amp;format=json&amp;search=&quot;</span>,
+        <span class="ot">$scope</span>.<span class="fu">selectItem</span> = <span class="kw">function</span>(item) {
+            <span class="ot">$scope</span>.<span class="fu">item</span> = item;
         };
     };
-    &lt;/script&gt;
-    &lt;input style=&quot;width:400px&quot; class=&quot;form-control&quot;
-        typeahead-on-select=&quot;example.onSelect($item)&quot;
-        ng-model=&quot;example.input&quot;
-        suggest-typeahead=&quot;example.api&quot; jsonp=1
-        placeholder=&quot;Search Wikipedia&quot;
-    /&gt;
-    
+    <span class="kw">&lt;/script&gt;</span>
+    <span class="kw">&lt;body</span><span class="ot"> ng-controller=</span><span class="st">&quot;MyController&quot;</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;input</span><span class="ot"> style=</span><span class="st">&quot;width:400px&quot;</span><span class="ot"> class=</span><span class="st">&quot;form-control&quot;</span>
+<span class="ot">        typeahead-on-select=</span><span class="st">&quot;selectItem($item)&quot;</span>
+<span class="ot">        ng-model=</span><span class="st">&quot;input&quot;</span>
+<span class="ot">        suggest-typeahead=</span><span class="st">&quot;api&quot;</span><span class="ot"> jsonp=</span><span class="st">1</span>
+<span class="ot">        placeholder=</span><span class="st">&quot;Search Wikipedia&quot;</span>
+    <span class="kw">/&gt;</span>
+    {{item}}
     ...
     
-    &lt;/body&gt;
-    &lt;/html&gt;</code></pre>
+  <span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></code></pre>
 <p>This piece of HTML will result in a fully fledged wikipedia search bar with typeahead, looking like this:</p>
 <div class="figure">
 <img src="suggest_wikipedia_en.png" alt="Suggest Wikipedia articles with ng-suggest" /><p class="caption">Suggest Wikipedia articles with ng-suggest</p>
@@ -108,18 +124,19 @@
 <p>Similar suggestions can be provided for any Open Search Suggestions service by just changing the service’s base URL. Among other features, responses can be embedded as simple lists (for instance related documents and related publications), and different JSON response formats can be mapped.</p>
 <h2 id="availability-with-ng-daia">Availability with ng-daia</h2>
 <p>DAIA defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites. Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module ng-daia implements client code to execute and process a DAIA query and to display holding information in convenient form. The integration into HTML is exemplarily documented in the following code:</p>
-<pre><code>&lt;html ng-app=&quot;myApp&quot;&gt;
-&lt;head&gt;
-  &lt;script src=&quot;angular.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;ng-daia.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script&gt;angular.module(&#39;myApp&#39;, [&#39;ngDAIA&#39;]);&lt;/script&gt;
-  &lt;link href=&quot;ng-daia.css&quot; rel=&quot;stylesheet&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div daia-api=&quot;http://your-daia-base-url&quot; daia-id=&quot;your-document-id&quot;&gt;
-  &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> ng-app=</span><span class="st">&quot;myApp&quot;</span><span class="kw">&gt;</span>
+ <span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ng-daia.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="er">  &lt;script&gt;angular.module(&#39;myApp&#39;, [&#39;ngDAIA&#39;]);&lt;/script&gt;</span>
+  <span class="kw">&lt;link</span><span class="ot"> href=</span><span class="st">&quot;ng-daia.css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span>
+ <span class="kw">&lt;/head&gt;</span>
+ <span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;div</span><span class="ot"> daia-api=</span><span class="st">&quot;//daia.gbv.de/&quot;</span> 
+<span class="ot">       daia-id=</span><span class="st">&quot;opac-de-ma9:ppn:685460711&quot;</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+ <span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></code></pre>
 <p>ng-daia is hosted in a public git repository, documented and downloadable at <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a>. The module utilizes its directives to query a DAIA server and transform the received object to control the displaying of specific parts of information. To achieve a compact structure, there are different directives for the response as a whole, a single item of the result and the information concerning its current availability. The availability of documents in DAIA is split into several independent services (openaccess, loan, interloan and presentation), which can be reflected in the implementation. Furthermore, <code>daia-simple</code> defines an additional format provided by this module, providing the most preferable status for any single item of the result and displaying the available service in a short form. Included are standard templates, which make use of the in-HTML logic features of AngularJS such as <code>ng-if</code> and <code>ng-repeat</code>. The output using these templates may look like this:</p>
 <div class="figure">
 <img src="ngdaia_demo_EN_full.png" alt="example output of ng-daia with standard templates" /><p class="caption">example output of ng-daia with standard templates</p>
@@ -151,6 +168,12 @@
 <p>“Ng-Suggest.” 2014. <a href="http://gbv.github.io/ng-suggest/">http://gbv.github.io/ng-suggest/</a>.</p>
 <p>Voß, Jakob. 2008. “SeeAlso: a Simple Linkserver Protocol.” <em>Ariadne</em> (57). <a href="http://www.ariadne.ac.uk/issue57/voss/">http://www.ariadne.ac.uk/issue57/voss/</a>.</p>
 <p>Voß, Jakob, and Moritz Horn. 2014. “Ng-Daia.” <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>All examples are available also as part of the article’s code repository at <a href="http://github.com/jakobib/angularjs2014/">http://github.com/jakobib/angularjs2014/</a>.<a href="#fnref1">↩</a></p></li>
+</ol>
 </div>
 </body>
 </html>

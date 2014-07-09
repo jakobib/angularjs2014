@@ -160,11 +160,9 @@ form element:
 
 ```{.html}
 <html ng-app="myApp">
-    <link href=".bootstrap.min.css" rel="stylesheet" />
+    <link href="bootstrap.min.css" rel="stylesheet" />
     <script src="angular.min.js"></script>
-    <script src="angular-sanitize.min.js"></script>
-    <script src="ui-bootstrap.min.js"></script>
-    <script src="ui-bootstrap-tpls.js"></script>
+    <script src="ui-bootstrap-tpls.min.js"></script>
     <script src="ng-suggest.min.js"></script>
     <script>
     angular.module('myApp', ['ui.bootstrap','ngSuggest']);
@@ -220,8 +218,8 @@ The integration into HTML is exemplarily documented in the following code:
   <link href="ng-daia.css" rel="stylesheet" />
  </head>
  <body>
-  <div daia-api="http://your-daia-base-url" 
-       daia-id="your-document-id">
+  <div daia-api="//daia.gbv.de/" 
+       daia-id="opac-de-ma9:ppn:685460711">
   </div>
  </body>
 </html>
