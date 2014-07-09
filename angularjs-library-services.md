@@ -219,7 +219,7 @@ The integration into HTML is exemplarily documented in the following code:
   <link href="ng-daia.css" rel="stylesheet" />
  </head>
  <body>
-  <div daia-api="//daia.gbv.de/" 
+  <div daia-api="http://daia.gbv.de/" 
        daia-id="opac-de-ma9:ppn:685460711">
   </div>
  </body>
