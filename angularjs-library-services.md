@@ -62,9 +62,6 @@ diagram:
 
 ![From library service to web application](layers.png)
 
-[DAIA]: http://purl.org/NET/DAIA
-[AngularJS]: https://angularjs.org/
-
 # AngularJS
 
 [AngularJS] is a web application framework that aims to enhance the
@@ -130,9 +127,11 @@ to create such a list could also be packed in a new directive to be used as
 
 The practical embedding of library services in websites with AngularJS is
 illustrated in the following with two examples. Both are available as AngularJS
-modules for easy reuse: the ng-suggest module provides access to search 
-suggestions and links [@ngsuggest] and the ng-daia module provides access to
-availability information [@ngdaia].
+modules for easy reuse: the *ng-suggest* module provides access to search 
+suggestions and links [@ngsuggest] and the *ng-daia* module provides access to
+availability information [@ngdaia]. Both modules are hosted in public git 
+repositories with API documentation, examples, and downloads 
+(<http://gbv.github.io/ng-suggest/> and <http://gbv.github.io/ng-daia/>).
 
 ## Suggestions with ng-suggest
 
@@ -154,9 +153,9 @@ with at least two elements (query string and a list of search completions):
 
 Optional elements can include descriptions and URLs for each search completion.
 While processing of this simple format is not very complex, it still requires
-JavaScript skills to make use of a suggestion service. ng-suggest simplifies
-the embedding to two HTML statements. The following example code adds Wikipedia typeahead features to an input
-form element:
+JavaScript skills to make use of a suggestion service. *ng-suggest* simplifies
+the embedding to two HTML statements. The following example code adds Wikipedia 
+typeahead features to an input form element:
 
 ```{.html}
 <html ng-app="myApp">
@@ -188,14 +187,15 @@ form element:
 </html>
 ```
 
-This piece of HTML will result in a fully fledged wikipedia search bar with typeahead, looking like this:
+The resulting HTML page looks like the following figure:
 
 ![Suggest Wikipedia articles with ng-suggest](suggest_wikipedia_en.png)
 
 Similar suggestions can be provided for any Open Search Suggestions service
 by just changing the service's base URL. Among other features, responses can be
-embedded as simple lists (for instance related documents and related 
-publications), and different JSON response formats can be mapped.
+embedded as simple lists (SeeAlso recommender services, for instance related 
+documents and related publications), and different JSON response formats can 
+be mapped from.
 
 ## Availability with ng-daia
 
@@ -203,9 +203,10 @@ DAIA defines a data model and an HTTP API for accessing information about the
 current availability of documents. Its aim is to provide a way for libraries to
 allow open and easy-to-use access to holding information from their catalogs.
 This, in turn, enables the inclusion of document availability information in
-external applications and websites. Among other formats, DAIA provides
+external applications and websites (catalogs, reference management, e-learning
+platforms etc.). Among other formats, DAIA provides
 availability information in JSON, the first choice for web applications written
-in JavaScript. The AngularJS module ng-daia implements client code to execute
+in JavaScript. The AngularJS module *ng-daia* implements client code to execute
 and process a DAIA query and to display holding information in convenient form.
 The integration into HTML is exemplarily documented in the following code: 
 
@@ -225,41 +226,42 @@ The integration into HTML is exemplarily documented in the following code:
 </html>
 ```
 
-ng-daia is hosted in a public git repository, documented and downloadable at
-<http://gbv.github.io/ng-daia/>. The module utilizes its directives to query a
-DAIA server and transform the received object to control the displaying of
-specific parts of information. To achieve a compact structure, there are
-different directives for the response as a whole, a single item of the result
-and the information concerning its current availability. The availability of
-documents in DAIA is split into several independent services (openaccess, loan,
-interloan and presentation), which can be reflected in the implementation.
-Furthermore, `daia-simple` defines an additional format provided by this
-module, providing the most preferable status for any single item of the result
-and displaying the available service in a short form. Included are standard
-templates, which make use of the in-HTML logic features of AngularJS such as
-`ng-if` and `ng-repeat`. The output using these templates may look like this:
+The *ng-daia* module provides a directive (`daia-api`) to query a DAIA service
+with a given document identifier (`daia-id`). The recieved DAIA response is then
+fed to a customizable AngularJS template, resulting in the following display: 
 
-![example output of ng-daia with standard templates](ngdaia_demo_EN_full.png)
+![Full availability view with ng-daia default template](ngdaia_demo_EN_full.png)
 
-In this example you can see the nested structure of the DAIA data model, which
-consists of an outer layer for institutional and document information as a
-whole. The document object contains one or more items, which can be further
-attributed to departments of the holding institution or a location (e.g. shelf
-mark). Within each item object, the availability for specific services is
-enclosed, as well as limitations and further options for those services (such
-as reserving a currently lent physical copy). The filter `daia-simple` would in
-this example return an object with a field `status: 'loan'`, as loan is
-currently the most preferable available service. In addition, the templates
-provide localization capabilities using
-[angular-translate](http://angular-translate.github.io/).
+The full availability view as implemented in the default templates of *ng-daia*
+reflects the nested structure of DAIA data model, consisting of an outer layer
+for institutional and general document information and displays for particular
+document holdings [@DAIA]. The default template of directive `ng-api` uses
+another directive for display of holding item (`daia-item`) and its item 
+template can be customized as well. Another directive is provided for most
+compact display (`daia-simple`, see figure 5). DAIA Simple is a flattened,
+aggregated form of availability information that covers typical use cases,
+such as short display in a result list [@DAIA, section 6.1]. The *ng-daia* 
+module includes functions to transform from full DAIA to DAIA simple as well.
 
-Utilizing this tool will allow website creators to easily embedd either current
-information concerning a specific document, or providing a way to request
-availability information from multiple sources.
+![Minimal availability view with daia-simple](ngdaia_demo_EN_simple.png)
+
+All templates included in *ng-daia* can be customized with CSS. Localization 
+for display in other languages is already supported with the popular module 
+[angular-translate] [@angular-translate]. Thanks to two-way binding of 
+AngularJS variables, a simple statement such as `$scope.language = 'de'` can
+be enough to update the full availability display in another language.
 
 # Conclusions
 
-AngularJS modules, such as ng-suggest and ng-daia presented above, provide an
+*This section is still being written*
+
+...
+Utilizing this tool will allow website creators to easily embedd either current
+information concerning a specific document, or providing a way to request
+availability information from multiple sources.
+...
+
+AngularJS modules, such as *ng-suggest* and *ng-daia* presented above, provide an
 easy method to integrate library services in websites and applications. A basic
 prequisite to support use of a library service, however, is the availability of
 an HTTP-based API to this service. Despite existing efforts to open library
@@ -314,5 +316,9 @@ an easy way how library services, if available in form of APIs,
 can be exposed, used and integrated into other web applications.
 
 ---
+
+[DAIA]: http://purl.org/NET/DAIA
+[AngularJS]: https://angularjs.org/
+[angular-translate]: http://angular-translate.github.io/
 
 # References
