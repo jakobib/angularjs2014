@@ -1,28 +1,26 @@
-<html ng-app="myApp">
-<head>
-    <link href="bootstrap.min.css" rel="stylesheet" />
-    <script src="angular.min.js"></script>
-    <script src="ui-bootstrap-tpls.min.js"></script>
-    <script src="ng-suggest.min.js"></script>
-    <script>
-        angular.module('myApp', ['ui.bootstrap','ngSuggest']);
-        function MyController($scope){
-            $scope.api = 
-                "https://en.wikipedia.org/w/api.php?action=opensearch&limit=10&namespace=0&format=json&search=",
-            $scope.selectItem = function(item) {
-                $scope.item = item;
-            };
-        };
-    </script>
-</head>
-<body ng-controller="MyController">
-    <input style="width:400px" class="form-control"
-        typeahead-on-select="selectItem($item)"
-        ng-model="input"
-        suggest-typeahead="api" jsonp=1
-        placeholder="Search Wikipedia"
-    />
-{{item}}
-
-</body>
+<html ng-app="myApp"
+ <head>
+  <script src="angular.min.js"></script>
+  <script src="ui-bootstrap-tpls.min.js"></script>
+  <script src="ng-suggest.min.js"></script>
+  <script>
+    angular.module('myApp', ['ui.bootstrap','ngSuggest']);
+    function MyController($scope) {
+      $scope.api = "https://en.wikipedia.org/w/api.php?action=opensearch&"
+                 + "limit=10&namespace=0&format=json&search=";
+      $scope.selectItem = function(item) {
+        $scope.item = item;
+      };
+    };
+  </script>
+  <link href="bootstrap.min.css" rel="stylesheet" />
+ </head>
+ <body ng-controller="MyController">
+  <input style="width:400px" class="form-control"
+         typeahead-on-select="selectItem($item)"
+         ng-model="input"
+         suggest-typeahead="api" jsonp=1
+         placeholder="Search Wikipedia" />
+  <div ng-if="item">{{item.label}}</div>
+ </body>
 </html>

@@ -22,7 +22,7 @@ promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
 rarely build of loosely coupled parts that could be used independently.
 The background of this abidance on monolithical systems must be discussed
-elsewhere. One reason might be a lack of motivation to provide library
+elsewhere, but one reason might be a lack of motivation to provide library
 services via open APIs.
 
 ## Library services and APIs
@@ -44,21 +44,21 @@ Without APIs, applications are difficult to build and services can only be
 provided in limited form. Without applications, however, it is difficult to
 justify the need for an API.
 
-To give an example, most library systems lack an API to query current 
-availability of documents held by the library. As long as information about 
+To give an example, most library systems lack an API to query current
+availability of documents held by the library. As long as information about
 current availability was only displayed in local library OPACs there was little
-motivation to create a public API. With the need to display availability
-information in discovery interfaces such as VuFind, the Document Availability 
-Information API ([DAIA]) was specified and implemented at GBV [@DAIA]. But 
-little interest was shown by other libraries and system vendors as long as they 
-did not require the API for internal use. The full benefit of an open API is not 
-revealed until different applications by different parties make use of it. This
-article will demonstrate a possible strategy to increase visibility and use of 
-library APIs by providing client modules that facilitate the creation of 
-applications by third parties. The modules are based on the JavaScript 
-framework AngularJS which is getting more and more popular among developers
-of web applications. The general strategy is illustrated in the following
-diagram:
+motivation to create a public API for this purpose. With the need to display
+availability information in discovery interfaces such as VuFind, the Document
+Availability Information API ([DAIA]) was specified and implemented at GBV
+[@DAIA]. But little interest was shown by other libraries and system vendors as
+long as they did not require the API for internal use. The full benefit of an
+open API is not revealed until different applications by different parties make
+use of it. This article will demonstrate a possible strategy to increase
+visibility and use of library APIs by providing client modules that facilitate
+the creation of applications by third parties. The modules are based on the
+JavaScript framework AngularJS which is getting more and more popular among
+developers of web applications. The general strategy is illustrated in the
+following diagram:
 
 ![From library service to web application](layers.png)
 
@@ -158,32 +158,31 @@ the embedding to two HTML statements. The following example code adds Wikipedia
 typeahead features to an input form element:
 
 ```{.html}
-<html ng-app="myApp">
-    <link href="bootstrap.min.css" rel="stylesheet" />
-    <script src="angular.min.js"></script>
-    <script src="ui-bootstrap-tpls.min.js"></script>
-    <script src="ng-suggest.min.js"></script>
-    <script>
+<html ng-app="myApp"
+ <head>
+  <script src="angular.min.js"></script>
+  <script src="ui-bootstrap-tpls.min.js"></script>
+  <script src="ng-suggest.min.js"></script>
+  <script>
     angular.module('myApp', ['ui.bootstrap','ngSuggest']);
-    function MyController($scope){
-        $scope.api = 
-            "https://en.wikipedia.org/w/api.php?action=opensearch&limit=10&namespace=0&format=json&search=",
-        $scope.selectItem = function(item) {
-            $scope.item = item;
-        };
+    function MyController($scope) {
+      $scope.api = "https://en.wikipedia.org/w/api.php?action=opensearch&"
+                 + "limit=10&namespace=0&format=json&search=";
+      $scope.selectItem = function(item) {
+        $scope.item = item;
+      };
     };
-    </script>
-    <body ng-controller="MyController">
-    <input style="width:400px" class="form-control"
-        typeahead-on-select="selectItem($item)"
-        ng-model="input"
-        suggest-typeahead="api" jsonp=1
-        placeholder="Search Wikipedia"
-    />
-    {{item}}
-    ...
-    
-  </body>
+  </script>
+  <link href="bootstrap.min.css" rel="stylesheet" />
+ </head>
+ <body ng-controller="MyController">
+  <input style="width:400px" class="form-control"
+         typeahead-on-select="selectItem($item)"
+         ng-model="input"
+         suggest-typeahead="api" jsonp=1
+         placeholder="Search Wikipedia" />
+  <div ng-if="item">{{item.label}}</div>
+ </body>
 </html>
 ```
 
@@ -253,40 +252,32 @@ be enough to update the full availability display in another language.
 
 # Conclusions
 
-*This section is still being written*
+Despite efforts to open up library systems via standard APIs, for instance the
+ILS-DI recommendations [@ilsdi], the support of library services via open APIs
+is rather low. In most cases either there is no API, APIs are complex and
+available only for internal use (e.g. NCIP), or APIs are very specific to a
+particular vendor. This lack of standard access to library systems, however,
+also origins from a lack of motivation to implement and document library
+services so they can be used easily by other developers.
+
+This article shows how library services (search suggestions, recommendations,
+document availabilityi...) can be used easily with AngularJS client modules,
+once the corresponding API (Open Search Suggestions, DAIA...) has been
+implemented for a given library. With *ng-suggest*, *ng-daia* and similar
+modules for remaining core services (e.g. search with SRU or OpenSearch and
+patron accounts with PAIA)^[A third module currently being worked on is
+*ng-skos* (<https://github.com/gbv/ng-skos>) to interact with authority files
+simple knowledge organisation systems.] it should even be possible to create a
+custom OPAC interface in a few hundered lines of HTML and JavaScript.
 
 ...
-Utilizing this tool will allow website creators to easily embedd either current
-information concerning a specific document, or providing a way to request
-availability information from multiple sources.
-...
-
-AngularJS modules, such as *ng-suggest* and *ng-daia* presented above, provide an
-easy method to integrate library services in websites and applications. A basic
-prequisite to support use of a library service, however, is the availability of
-an HTTP-based API to this service. Despite existing efforts to open library
-systems (e.g. the [ILS-DI
-Recommendations](http://old.diglib.org/architectures/ilsdi/) and [WorldCat Web
-Services](www.oclc.org/developer/webservices)) the support of standard APIs in
-library systems is non-satisfying. Apart from search via SRU and resource
-synchronization via OAI-PMH, most library services are not provided via an API
-at all, or the API is specific to the underlying library system only, or it is
-very complex and only available for internal use (e.g. NCIP). The lack of
-available APIs, however, is not a technical problem but a problem of motivation
-to specify, implement, provide, and document these APIs. The examples of how to
-integrate library services in arbitrary web applications, given in this
-article, may at least add some motivation to provide library services via open
-APIs.
 
 Even if AngularJS is or will not be the technology of your choice, the
 principle illustrated in the initial diagram above makes sense. Libraries
 should not only expose their services via openly specified APIs but also
 provide client libraries to facilitate the integration of these services into
 web applications. To minimize the work of doing so, one should build on
-standardized APIs instead of (re)inventing new APIs for every library system.
-
-*...lessons learned: development of an API and an API client as AngularJS module
-is fruitful...*
+standardized APIs independent from particular library systems.
 
 Candidates for most missing AngularJS modules to access library services: SRU
 and/or OpenSearch (see http://dlib.org/dlib/july10/hammond/07hammond.html for a
@@ -301,21 +292,20 @@ evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)...
 
 *Notes maybe to include in the article text:*
 
-A third example can be found as work in progress at <https://github.com/gbv/ng-skos>. **ng-skos** is a module to interact with authority files and other simple
-knowledge organisation systems (SKOS).
+APIs can more easily be used in new web applications and experiments. 
 
-As is the philosophy of AngularJS easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the [Bootstrap UI](http://angular-ui.github.io/bootstrap/), provides a typeahead function for web applications.
+The examples may at least add some motivation to provide library services via
+open APIs.
 
-How can the vicious circle of missing APIs to library services be broken?
-
-(this article is based on
-the assumption that libraries actually want to facilitate the use of their
+(this article is based on the assumption that libraries actually want to
+facilitate the use of their
 servics. In some cases this assumption might be wrong).
 
-an easy way how library services, if available in form of APIs, 
-can be exposed, used and integrated into other web applications.
+[WorldCat Web Services](www.oclc.org/developer/webservices)
 
----
+Utilizing this tool will allow website creators to easily embedd either current
+information concerning a specific document, or providing a way to request
+availability information from multiple sources.
 
 [DAIA]: http://purl.org/NET/DAIA
 [AngularJS]: https://angularjs.org/
