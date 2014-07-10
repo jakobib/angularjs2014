@@ -4,7 +4,7 @@ The demand to open up library systems through web services has been known since
 years [@Breeding2009]. In particular service-oriented architecture (SOA)
 promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
-rarely build of loosely coupled parts that could be used independently.
+rarely built of loosely coupled parts that could be used independently.
 The background of this abidance on monolithical systems must be discussed
 elsewhere, but one reason might be a lack of motivation to provide library
 services via open APIs.
