@@ -1,19 +1,3 @@
----
-title: Exposing library services with AngularJS
-author:
-    - Jakob Voß
-    - Moritz Horn
-date: 2014-07-11
-nocite: |
-    @ngmodules
-...
-
-This article provides an introduction to the JavaScript framework AngularJS and
-specific AngularJS modules for accessing library services. It shows how
-information such as search suggestions, additional links, and availability
-can be embedded in any website. The ease of reuse may encourage more libraries
-to expose their services via standard APIs to allow usage in different context.
-
 # Introduction
 
 The demand to open up library systems through web services has been known since
@@ -55,7 +39,9 @@ long as they did not require the API for internal use. The full benefit of an
 open API is not revealed until different applications by different parties make
 use of it. This article will demonstrate a possible strategy to increase
 visibility and use of library APIs by providing client modules that facilitate
-the creation of applications by third parties. The modules are based on the
+the creation of applications by third parties.^[This article is based on the
+assumption that libraries actually want to facilitate the use of their servics.
+In some cases this assumption might be wrong.] The modules are based on the
 JavaScript framework AngularJS which is getting more and more popular among
 developers of web applications. The general strategy is illustrated in the
 following diagram:
@@ -77,7 +63,7 @@ attributes ("declarative HTML"). The core AngularJS module contains directives
 for basic programming syntax in HTML, such as conditionals (`ng-if`) and loops
 (`ng-repeat`), among others. This extension of HTML is further enriched to a a
 template syntax with AngularJS *expressions* written in curly brackets
-(`{{}}`). The most common use of these expression is to dynamically display
+(`{{...}}`). The most common use of these expression is to dynamically display
 variables in HTML templates. In contrast to most other template systems,
 variables are bound two-way: the display is updated automatically when a
 variable is changed, and changes of the HTML document (e.g. by input forms) are
@@ -158,7 +144,7 @@ the embedding to two HTML statements. The following example code adds Wikipedia
 typeahead features to an input form element:
 
 ```{.html}
-<html ng-app="myApp"
+<html ng-app="myApp">
  <head>
   <script src="angular.min.js"></script>
   <script src="ui-bootstrap-tpls.min.js"></script>
@@ -166,8 +152,8 @@ typeahead features to an input form element:
   <script>
     angular.module('myApp', ['ui.bootstrap','ngSuggest']);
     function MyController($scope) {
-      $scope.api = "https://en.wikipedia.org/w/api.php?action=opensearch&"
-                 + "limit=10&namespace=0&format=json&search=";
+      $scope.api = "https://en.wikipedia.org/w/api.php?action=opensearch"
+                 + "&limit=10&namespace=0&format=json&search=";
       $scope.selectItem = function(item) {
         $scope.item = item;
       };
@@ -229,7 +215,7 @@ The *ng-daia* module provides a directive (`daia-api`) to query a DAIA service
 with a given document identifier (`daia-id`). The recieved DAIA response is then
 fed to a customizable AngularJS template, resulting in the following display: 
 
-![Full availability view with ng-daia default template](ngdaia_demo_EN_full.png)
+![Full availability view with ng-daia default template](ngdaia_full.png)
 
 The full availability view as implemented in the default templates of *ng-daia*
 reflects the nested structure of DAIA data model, consisting of an outer layer
@@ -242,7 +228,7 @@ aggregated form of availability information that covers typical use cases,
 such as short display in a result list [@DAIA, section 6.1]. The *ng-daia* 
 module includes functions to transform from full DAIA to DAIA simple as well.
 
-![Minimal availability view with daia-simple](ngdaia_demo_EN_simple.png)
+![Minimal availability view with daia-simple](ngdaia_simple.png)
 
 All templates included in *ng-daia* can be customized with CSS. Localization 
 for display in other languages is already supported with the popular module 
@@ -254,61 +240,44 @@ be enough to update the full availability display in another language.
 
 Despite efforts to open up library systems via standard APIs, for instance the
 ILS-DI recommendations [@ilsdi], the support of library services via open APIs
-is rather low. In most cases either there is no API, APIs are complex and
-available only for internal use (e.g. NCIP), or APIs are very specific to a
-particular vendor. This lack of standard access to library systems, however,
-also origins from a lack of motivation to implement and document library
-services so they can be used easily by other developers.
+is rather low. If APIs exist (e.g. NCIP), they are often complex,
+vendor-specific, or available only for internal use. One reason for the lack of
+open APIs may be the invisibility of benefits and usage examples. The examples
+given in this article demonstrate how library services (e.g. search
+suggestions, recommendations, document availabilityi...) can be used easily
+once they have been made available via standardized APIs (e.g. Open Search
+Suggestions and DAIA). 
 
-This article shows how library services (search suggestions, recommendations,
-document availabilityi...) can be used easily with AngularJS client modules,
-once the corresponding API (Open Search Suggestions, DAIA...) has been
-implemented for a given library. With *ng-suggest*, *ng-daia* and similar
-modules for remaining core services (e.g. search with SRU or OpenSearch and
-patron accounts with PAIA)^[A third module currently being worked on is
-*ng-skos* (<https://github.com/gbv/ng-skos>) to interact with authority files
-simple knowledge organisation systems.] it should even be possible to create a
-custom OPAC interface in a few hundered lines of HTML and JavaScript.
+The simple integration into web applications also requires client modules like
+*ng-suggest* and *ng-daia* for AngularJS.  Missing AngularJS modules for other
+standard APIs relevant to libraries, such as OpenSearch and SRU for search
+[@Hammond2010] and PAIA for patron account interaction [@PAIA]) shouldn't be
+hard to implement.^[We are currently working on the module *ng-skos*
+(<https://github.com/gbv/ng-skos>) to interact with authority files and simple
+knowledge organisation systems.] Most important, these client modules only have
+to be implemented once instead of having to build both server and client
+implementation for each particular library system. With a set of AngularJS
+modules for the basic library services (search, availability, patron account)
+it should even be possible to create a custom OPAC interface in less than
+hundred lines of HTML and JavaScript.
 
-...
-
-Even if AngularJS is or will not be the technology of your choice, the
-principle illustrated in the initial diagram above makes sense. Libraries
+Even if AngularJS is not the framework of your choice, it makes sense to
+provide client modules to your APIs, as illustrated in figure 1.  Libraries
 should not only expose their services via openly specified APIs but also
 provide client libraries to facilitate the integration of these services into
 web applications. To minimize the work of doing so, one should build on
-standardized APIs independent from particular library systems.
-
-Candidates for most missing AngularJS modules to access library services: SRU
-and/or OpenSearch (see http://dlib.org/dlib/july10/hammond/07hammond.html for a
-description/example of both).
-
-*...If no common API exists, one must specify one...  for instance at GBV we are
-evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)...*
-
-*...some final words...*
-
----
-
-*Notes maybe to include in the article text:*
-
-APIs can more easily be used in new web applications and experiments. 
-
-The examples may at least add some motivation to provide library services via
-open APIs.
-
-(this article is based on the assumption that libraries actually want to
-facilitate the use of their
-servics. In some cases this assumption might be wrong).
-
-[WorldCat Web Services](www.oclc.org/developer/webservices)
-
-Utilizing this tool will allow website creators to easily embedd either current
-information concerning a specific document, or providing a way to request
-availability information from multiple sources.
+standardized APIs independent from particular library systems. We hope to
+motivate more library developers in doing so.^[One can also ask the vendor of
+library systems to implement standardized APIs to the core functionality of its
+product, but this requires some pressure by libraries as customers.]
 
 [DAIA]: http://purl.org/NET/DAIA
 [AngularJS]: https://angularjs.org/
 [angular-translate]: http://angular-translate.github.io/
 
 # References
+
+---
+nocite: '@ngmodules'
+...
+

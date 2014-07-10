@@ -1,14 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <meta name="author" content="Jakob Voß" />
-  <meta name="author" content="Moritz Horn" />
-  <meta name="date" content="2014-07-11" />
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="dcterms.date" content="2014-07-11">
   <title>Exposing library services with AngularJS</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -28,60 +29,71 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
   </style>
-  <link rel="stylesheet" href="code4lib.css" type="text/css" />
+  <link rel="stylesheet" href="code4lib.css">
 </head>
 <body>
-<div id="header">
+<header>
+
+<p id="issueDesignation">2014-07-11</p>
 <h1 class="title">Exposing library services with AngularJS</h1>
-<h2 class="author">Jakob Voß</h2>
-<h2 class="author">Moritz Horn</h2>
-<h3 class="date">2014-07-11</h3>
+
+<div class="abstract">
+    <p><p>This article provides an introduction to the JavaScript framework AngularJS and specific AngularJS modules for accessing library services. It shows how information such as search suggestions, additional links, and availability can be embedded in any website. The ease of reuse may encourage more libraries to expose their services via standard APIs to allow usage in different context.</p></p>
 </div>
-<p>This article provides an introduction to the JavaScript framework AngularJS and specific AngularJS modules for accessing library services. It shows how information such as search suggestions, additional links, and availability can be embedded in any website. The ease of reuse may encourage more libraries to expose their services via standard APIs to allow usage in different context.</p>
+
+<div class="author">
+by
+Jakob Voß
+ and
+Moritz Horn
+</div>
+</header>
+
+
 <h1 id="introduction">Introduction</h1>
-<p>The demand to open up library systems through web services has been known since years <span class="citation">(Breeding 2009)</span>. In particular service-oriented architecture (SOA) promised to better allow a continuous evolution of library automation and to better connect with external systems. Nevertheless current library systems are rarely build of loosely coupled parts that could be used independently. The background of this abidance on monolithical systems must be discussed elsewhere. One reason might be a lack of motivation to provide library services via open APIs.</p>
+<p>The demand to open up library systems through web services has been known since years <span class="citation" data-cites="Breeding2009">(Breeding 2009)</span>. In particular service-oriented architecture (SOA) promised to better allow a continuous evolution of library automation and to better connect with external systems. Nevertheless current library systems are rarely build of loosely coupled parts that could be used independently. The background of this abidance on monolithical systems must be discussed elsewhere, but one reason might be a lack of motivation to provide library services via open APIs.</p>
 <h2 id="library-services-and-apis">Library services and APIs</h2>
 <p>Services provided by a library or similar institution should be easy to use by anyone and in any form. Most services, however, can only be used in the fixed context of a particular user interface. If a service can be accessed via application programming interface (API), it can also be integrated and used in other applications. Nevertheless there is a lack of motivation to expose services via open APIs.</p>
 <p>User interfaces are curated and revised by usability studies and user experience (UX) at best. In other instances the UI is simply judged with common sense by normal library staff and management. APIs on the other hand, cannot simply be viewed, used, and judged by anyone. Unlike the UI, an API is not a final application to make use of a service, but the basis for creation of service applications: Without APIs, applications are difficult to build and services can only be provided in limited form. Without applications, however, it is difficult to justify the need for an API.</p>
-<p>To give an example, most library systems lack an API to query current availability of documents held by the library. As long as information about current availability was only displayed in local library OPACs there was little motivation to create a public API. With the need to display availability information in discovery interfaces such as VuFind, the Document Availability Information API (<a href="http://purl.org/NET/DAIA">DAIA</a>) was specified and implemented at GBV <span class="citation">(Voß and Reh 2014)</span>. But little interest was shown by other libraries and system vendors as long as they did not require the API for internal use. The full benefit of an open API is not revealed until different applications by different parties make use of it. This article will demonstrate a possible strategy to increase visibility and use of library APIs by providing client modules that facilitate the creation of applications by third parties. The modules are based on the JavaScript framework AngularJS which is getting more and more popular among developers of web applications. The general strategy is illustrated in the following diagram:</p>
-<div class="figure">
-<img src="layers.png" alt="From library service to web application" /><p class="caption">From library service to web application</p>
-</div>
+<p>To give an example, most library systems lack an API to query current availability of documents held by the library. As long as information about current availability was only displayed in local library OPACs there was little motivation to create a public API for this purpose. With the need to display availability information in discovery interfaces such as VuFind, the Document Availability Information API (<a href="http://purl.org/NET/DAIA">DAIA</a>) was specified and implemented at GBV <span class="citation" data-cites="DAIA">(Voß and Reh 2014)</span>. But little interest was shown by other libraries and system vendors as long as they did not require the API for internal use. The full benefit of an open API is not revealed until different applications by different parties make use of it. This article will demonstrate a possible strategy to increase visibility and use of library APIs by providing client modules that facilitate the creation of applications by third parties.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The modules are based on the JavaScript framework AngularJS which is getting more and more popular among developers of web applications. The general strategy is illustrated in the following diagram:</p>
+<figure>
+<img src="layers.png" alt="From library service to web application" /><figcaption>From library service to web application</figcaption>
+</figure>
 <h1 id="angularjs">AngularJS</h1>
 <p><a href="https://angularjs.org/">AngularJS</a> is a web application framework that aims to enhance the functionality of JavaScript. The framework is designed to support modularization on multiple levels. Functionality of applications is broken into parts that can be tested and reused independently.</p>
-<p>Application logic is first grouped in <em>modules</em>, each included with an HTML <code>&lt;script&gt;</code> tag. Some popular modules are listed at the inofficial directory <a href="http://ngmodules.org/">http://ngmodules.org/</a>. Modules may build on each other and define <em>directives</em>. These directives can be used in form of custom HTML tags and attributes (“declarative HTML”). The core AngularJS module contains directives for basic programming syntax in HTML, such as conditionals (<code>ng-if</code>) and loops (<code>ng-repeat</code>), among others. This extension of HTML is further enriched to a a template syntax with AngularJS <em>expressions</em> written in curly brackets (<code>{{}}</code>). The most common use of these expression is to dynamically display variables in HTML templates. In contrast to most other template systems, variables are bound two-way: the display is updated automatically when a variable is changed, and changes of the HTML document (e.g. by input forms) are reflected in the JavaScript variables. Part of modularization, variables are limited to <em>scopes</em> that act like namespaces in other programming languages.</p>
-<p>The following example illustrates the use of AngularJS with scope variables, templates, and directives:<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>Application logic is first grouped in <em>modules</em>, each included with an HTML <code>&lt;script&gt;</code> tag. Some popular modules are listed at the inofficial directory <a href="http://ngmodules.org/">http://ngmodules.org/</a>. Modules may build on each other and define <em>directives</em>. These directives can be used in form of custom HTML tags and attributes (“declarative HTML”). The core AngularJS module contains directives for basic programming syntax in HTML, such as conditionals (<code>ng-if</code>) and loops (<code>ng-repeat</code>), among others. This extension of HTML is further enriched to a a template syntax with AngularJS <em>expressions</em> written in curly brackets (<code>{{...}}</code>). The most common use of these expression is to dynamically display variables in HTML templates. In contrast to most other template systems, variables are bound two-way: the display is updated automatically when a variable is changed, and changes of the HTML document (e.g. by input forms) are reflected in the JavaScript variables. Part of modularization, variables are limited to <em>scopes</em> that act like namespaces in other programming languages.</p>
+<p>The following example illustrates the use of AngularJS with scope variables, templates, and directives:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> ng-app=</span><span class="st">&quot;myApp&quot;</span><span class="kw">&gt;</span>
  <span class="kw">&lt;head&gt;</span>
   <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
   <span class="kw">&lt;script&gt;</span>
-<span class="er">    angular.module(&#39;myApp&#39;, []);</span>
-<span class="er">    function MyController($scope) {</span>
+    <span class="ot">angular</span>.<span class="fu">module</span>(<span class="st">&#39;myApp&#39;</span>, []);
+    <span class="kw">function</span> <span class="fu">MyController</span>($scope) {
       <span class="ot">$scope</span>.<span class="fu">books</span> = [
         { <span class="dt">title</span>: <span class="st">&quot;One Thousand and One Nights&quot;</span> },
         { <span class="dt">title</span>: <span class="st">&quot;Where the Wild Things Are&quot;</span>, <span class="dt">author</span>: <span class="st">&quot;Sendak&quot;</span> },
         { <span class="dt">title</span>: <span class="st">&quot;The Hobbit&quot;</span>, <span class="dt">author</span>: <span class="st">&quot;Tolkien&quot;</span> },
       ];
     }
-  <span class="kw">&lt;/script&gt;</span>
- <span class="kw">&lt;/head&gt;</span>
- <span class="kw">&lt;body</span><span class="ot"> ng-controller=</span><span class="st">&quot;MyController&quot;</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;ul</span><span class="ot"> ng-repeat=</span><span class="st">&quot;b in books | orderBy:&#39;title&#39;&quot;</span><span class="kw">&gt;</span>
-   <span class="kw">&lt;li&gt;</span>
-    <span class="kw">&lt;i&gt;</span>{{b.title}}<span class="kw">&lt;/i&gt;</span>
-    <span class="kw">&lt;span</span><span class="ot"> ng-if=</span><span class="st">&quot;b.author&quot;</span><span class="kw">&gt;</span>by {{b.author}}<span class="kw">&lt;/span&gt;</span>
-   <span class="kw">&lt;/li&gt;</span>
-  <span class="kw">&lt;/ul&gt;</span>
- <span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></code></pre>
+  &lt;<span class="ot">/script&gt;</span>
+<span class="ot"> &lt;/head</span>&gt;
+ &lt;body ng-controller=<span class="st">&quot;MyController&quot;</span>&gt;
+  &lt;ul ng-repeat=<span class="st">&quot;b in books | orderBy:&#39;title&#39;&quot;</span>&gt;
+   &lt;li&gt;
+    &lt;i&gt;{{<span class="ot">b</span>.<span class="fu">title</span>}}&lt;<span class="ot">/i&gt;</span>
+<span class="ot">    &lt;span ng-if=&quot;b.author&quot;&gt;by {{b.author}}&lt;/span</span>&gt;
+   &lt;<span class="ot">/li&gt;</span>
+<span class="ot">  &lt;/ul</span>&gt;
+ &lt;<span class="ot">/body&gt;</span>
+<span class="ot">&lt;/html</span>&gt;</code></pre>
 <p>The example consists of an application module “myApp”. This module defines a controller “MyController” to set a list of three bibliographic items in the variable “books” of a given scope. The controller is later used in the HTML body to display a sorted list of books with an HTML template. The template makes use of standard AngularJS directives (<code>ng-repeat</code>, <code>ng-if</code>) and expressions (<code>| orderBy:'title'</code>, <code>b.title</code>, <code>b.author</code>). The application logic to create such a list could also be packed in a new directive to be used as “widget” at multiple places.</p>
 <h1 id="modules-for-embedding-library-services">Modules for embedding library services</h1>
-<p>The practical embedding of library services in websites with AngularJS is illustrated in the following with two examples. Both are available as AngularJS modules for easy reuse: the <em>ng-suggest</em> module provides access to search suggestions and links <span class="citation">(Voß and Horn 2014a)</span> and the <em>ng-daia</em> module provides access to availability information <span class="citation">(Voß and Horn 2014b)</span>. Both modules are hosted in public git repositories with API documentation, examples, and downloads (<a href="http://gbv.github.io/ng-suggest/">http://gbv.github.io/ng-suggest/</a> and <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a>).</p>
+<p>The practical embedding of library services in websites with AngularJS is illustrated in the following with two examples. Both are available as AngularJS modules for easy reuse: the <em>ng-suggest</em> module provides access to search suggestions and links <span class="citation" data-cites="ngsuggest">(Voß and Horn 2014a)</span> and the <em>ng-daia</em> module provides access to availability information <span class="citation" data-cites="ngdaia">(Voß and Horn 2014b)</span>. Both modules are hosted in public git repositories with API documentation, examples, and downloads (<a href="http://gbv.github.io/ng-suggest/">http://gbv.github.io/ng-suggest/</a> and <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a>).</p>
 <h2 id="suggestions-with-ng-suggest">Suggestions with ng-suggest</h2>
-<p>The OpenSearch standard for search engines includes a specification for how to query search suggestions and autocomplete services via HTTP <span class="citation">(Clinton 2006)</span>. Suggestion services are provided by many search applications as “typeahead”. The method can also be used for instance by recommendation services <span class="citation">(Voß 2008)</span> and to support support tagging with controlled vocabularies <span class="citation">(Nagaya et al. 2011)</span>.</p>
-<div class="figure">
-<img src="typeahead.jpg" alt="Typeahead via OpenSearch Suggestions" /><p class="caption">Typeahead via OpenSearch Suggestions</p>
-</div>
+<p>The OpenSearch standard for search engines includes a specification for how to query search suggestions and autocomplete services via HTTP <span class="citation" data-cites="Clinton2006">(Clinton 2006)</span>. Suggestion services are provided by many search applications as “typeahead”. The method can also be used for instance by recommendation services <span class="citation" data-cites="Voss2008">(Voß 2008)</span> and to support support tagging with controlled vocabularies <span class="citation" data-cites="Nagaya2011">(Nagaya et al. 2011)</span>.</p>
+<figure>
+<img src="typeahead.jpg" alt="Typeahead via OpenSearch Suggestions" /><figcaption>Typeahead via OpenSearch Suggestions</figcaption>
+</figure>
 <p>The OpenSearch Suggestions specification defines a query response as JSON array with at least two elements (query string and a list of search completions):</p>
 <pre><code>[
     &quot;Moz&quot;,
@@ -89,36 +101,35 @@ code > span.er { color: #ff0000; font-weight: bold; }
 ]</code></pre>
 <p>Optional elements can include descriptions and URLs for each search completion. While processing of this simple format is not very complex, it still requires JavaScript skills to make use of a suggestion service. <em>ng-suggest</em> simplifies the embedding to two HTML statements. The following example code adds Wikipedia typeahead features to an input form element:</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> ng-app=</span><span class="st">&quot;myApp&quot;</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;link</span><span class="ot"> href=</span><span class="st">&quot;bootstrap.min.css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span>
-    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ui-bootstrap-tpls.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ng-suggest.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-    <span class="kw">&lt;script&gt;</span>
-<span class="er">    angular.module(&#39;myApp&#39;, [&#39;ui.bootstrap&#39;,&#39;ngSuggest&#39;]);</span>
-<span class="er">    function MyController($scope){</span>
-        <span class="ot">$scope</span>.<span class="fu">api</span> = 
-            <span class="st">&quot;https://en.wikipedia.org/w/api.php?action=opensearch&amp;limit=10&amp;namespace=0&amp;format=json&amp;search=&quot;</span>,
-        <span class="ot">$scope</span>.<span class="fu">selectItem</span> = <span class="kw">function</span>(item) {
-            <span class="ot">$scope</span>.<span class="fu">item</span> = item;
-        };
+ <span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ui-bootstrap-tpls.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ng-suggest.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script&gt;</span>
+    <span class="ot">angular</span>.<span class="fu">module</span>(<span class="st">&#39;myApp&#39;</span>, [<span class="st">&#39;ui.bootstrap&#39;</span>,<span class="st">&#39;ngSuggest&#39;</span>]);
+    <span class="kw">function</span> <span class="fu">MyController</span>($scope) {
+      <span class="ot">$scope</span>.<span class="fu">api</span> = <span class="st">&quot;https://en.wikipedia.org/w/api.php?action=opensearch&quot;</span>
+                 + <span class="st">&quot;&amp;limit=10&amp;namespace=0&amp;format=json&amp;search=&quot;</span>;
+      <span class="ot">$scope</span>.<span class="fu">selectItem</span> = <span class="kw">function</span>(item) {
+        <span class="ot">$scope</span>.<span class="fu">item</span> = item;
+      };
     };
-    <span class="kw">&lt;/script&gt;</span>
-    <span class="kw">&lt;body</span><span class="ot"> ng-controller=</span><span class="st">&quot;MyController&quot;</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;input</span><span class="ot"> style=</span><span class="st">&quot;width:400px&quot;</span><span class="ot"> class=</span><span class="st">&quot;form-control&quot;</span>
-<span class="ot">        typeahead-on-select=</span><span class="st">&quot;selectItem($item)&quot;</span>
-<span class="ot">        ng-model=</span><span class="st">&quot;input&quot;</span>
-<span class="ot">        suggest-typeahead=</span><span class="st">&quot;api&quot;</span><span class="ot"> jsonp=</span><span class="st">1</span>
-<span class="ot">        placeholder=</span><span class="st">&quot;Search Wikipedia&quot;</span>
-    <span class="kw">/&gt;</span>
-    {{item}}
-    ...
-    
-  <span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></code></pre>
+  &lt;<span class="ot">/script&gt;</span>
+<span class="ot">  &lt;link href=&quot;bootstrap.min.css&quot; rel=&quot;stylesheet&quot; /</span>&gt;
+ &lt;<span class="ot">/head&gt;</span>
+<span class="ot"> &lt;body ng-controller=&quot;MyController&quot;&gt;</span>
+<span class="ot">  &lt;input style=&quot;width:400px&quot; class=&quot;form-control&quot;</span>
+<span class="ot">         typeahead-on-select=&quot;selectItem</span><span class="fl">(</span><span class="ot">$item</span><span class="fl">)</span><span class="ot">&quot;</span>
+<span class="ot">         ng-model=&quot;input&quot;</span>
+<span class="ot">         suggest-typeahead=&quot;api&quot; jsonp=1</span>
+<span class="ot">         placeholder=&quot;Search Wikipedia&quot; /</span>&gt;
+  &lt;div ng-<span class="kw">if</span>=<span class="st">&quot;item&quot;</span>&gt;{{<span class="ot">item</span>.<span class="fu">label</span>}}&lt;<span class="ot">/div&gt;</span>
+<span class="ot"> &lt;/body</span>&gt;
+&lt;<span class="ot">/html&gt;</span></code></pre>
 <p>The resulting HTML page looks like the following figure:</p>
-<div class="figure">
-<img src="suggest_wikipedia_en.png" alt="Suggest Wikipedia articles with ng-suggest" /><p class="caption">Suggest Wikipedia articles with ng-suggest</p>
-</div>
+<figure>
+<img src="suggest_wikipedia_en.png" alt="Suggest Wikipedia articles with ng-suggest" /><figcaption>Suggest Wikipedia articles with ng-suggest</figcaption>
+</figure>
 <p>Similar suggestions can be provided for any Open Search Suggestions service by just changing the service’s base URL. Among other features, responses can be embedded as simple lists (SeeAlso recommender services, for instance related documents and related publications), and different JSON response formats can be mapped from.</p>
 <h2 id="availability-with-ng-daia">Availability with ng-daia</h2>
 <p>DAIA defines a data model and an HTTP API for accessing information about the current availability of documents. Its aim is to provide a way for libraries to allow open and easy-to-use access to holding information from their catalogs. This, in turn, enables the inclusion of document availability information in external applications and websites (catalogs, reference management, e-learning platforms etc.). Among other formats, DAIA provides availability information in JSON, the first choice for web applications written in JavaScript. The AngularJS module <em>ng-daia</em> implements client code to execute and process a DAIA query and to display holding information in convenient form. The integration into HTML is exemplarily documented in the following code:</p>
@@ -126,58 +137,56 @@ code > span.er { color: #ff0000; font-weight: bold; }
  <span class="kw">&lt;head&gt;</span>
   <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;angular.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
   <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;ng-daia.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="er">  &lt;script&gt;angular.module(&#39;myApp&#39;, [&#39;ngDAIA&#39;]);&lt;/script&gt;</span>
-  <span class="kw">&lt;link</span><span class="ot"> href=</span><span class="st">&quot;ng-daia.css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span> <span class="kw">/&gt;</span>
- <span class="kw">&lt;/head&gt;</span>
- <span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;div</span><span class="ot"> daia-api=</span><span class="st">&quot;http://daia.gbv.de/&quot;</span> 
-<span class="ot">       daia-id=</span><span class="st">&quot;opac-de-ma9:ppn:685460711&quot;</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;/div&gt;</span>
- <span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></code></pre>
+  <span class="kw">&lt;script&gt;</span><span class="ot">angular</span>.<span class="fu">module</span>(<span class="st">&#39;myApp&#39;</span>, [<span class="st">&#39;ngDAIA&#39;</span>]);&lt;<span class="ot">/script&gt;</span>
+<span class="ot">  &lt;link href=&quot;ng-daia.css&quot; rel=&quot;stylesheet&quot; /</span>&gt;
+ &lt;<span class="ot">/head&gt;</span>
+<span class="ot"> &lt;body&gt;</span>
+<span class="ot">  &lt;div daia-api=&quot;http://daia.gbv.de/</span><span class="st">&quot; </span>
+       daia-id=<span class="st">&quot;opac-de-ma9:ppn:685460711&quot;</span>&gt;
+  &lt;<span class="ot">/div&gt;</span>
+<span class="ot"> &lt;/body</span>&gt;
+&lt;<span class="ot">/html&gt;</span></code></pre>
 <p>The <em>ng-daia</em> module provides a directive (<code>daia-api</code>) to query a DAIA service with a given document identifier (<code>daia-id</code>). The recieved DAIA response is then fed to a customizable AngularJS template, resulting in the following display:</p>
-<div class="figure">
-<img src="ngdaia_demo_EN_full.png" alt="Full availability view with ng-daia default template" /><p class="caption">Full availability view with ng-daia default template</p>
-</div>
-<p>The full availability view as implemented in the default templates of <em>ng-daia</em> reflects the nested structure of DAIA data model, consisting of an outer layer for institutional and general document information and displays for particular document holdings <span class="citation">(Voß and Reh 2014)</span>. The default template of directive <code>ng-api</code> uses another directive for display of holding item (<code>daia-item</code>) and its item template can be customized as well. Another directive is provided for most compact display (<code>daia-simple</code>, see figure 5). DAIA Simple is a flattened, aggregated form of availability information that covers typical use cases, such as short display in a result list <span class="citation">(Voß and Reh 2014, sec. 6.1)</span>. The <em>ng-daia</em> module includes functions to transform from full DAIA to DAIA simple as well.</p>
-<div class="figure">
-<img src="ngdaia_demo_EN_simple.png" alt="Minimal availability view with daia-simple" /><p class="caption">Minimal availability view with daia-simple</p>
-</div>
-<p>All templates included in <em>ng-daia</em> can be customized with CSS. Localization for display in other languages is already supported with the popular module [angular-translate] <span class="citation">(Precht 2014)</span>. Thanks to two-way binding of AngularJS variables, a simple statement such as <code>$scope.language = 'de'</code> can be enough to update the full availability display in another language.</p>
+<figure>
+<img src="ngdaia_full.png" alt="Full availability view with ng-daia default template" /><figcaption>Full availability view with ng-daia default template</figcaption>
+</figure>
+<p>The full availability view as implemented in the default templates of <em>ng-daia</em> reflects the nested structure of DAIA data model, consisting of an outer layer for institutional and general document information and displays for particular document holdings <span class="citation" data-cites="DAIA">(Voß and Reh 2014)</span>. The default template of directive <code>ng-api</code> uses another directive for display of holding item (<code>daia-item</code>) and its item template can be customized as well. Another directive is provided for most compact display (<code>daia-simple</code>, see figure 5). DAIA Simple is a flattened, aggregated form of availability information that covers typical use cases, such as short display in a result list <span class="citation" data-cites="DAIA">(Voß and Reh 2014: 6.1)</span>. The <em>ng-daia</em> module includes functions to transform from full DAIA to DAIA simple as well.</p>
+<figure>
+<img src="ngdaia_simple.png" alt="Minimal availability view with daia-simple" /><figcaption>Minimal availability view with daia-simple</figcaption>
+</figure>
+<p>All templates included in <em>ng-daia</em> can be customized with CSS. Localization for display in other languages is already supported with the popular module [angular-translate] <span class="citation" data-cites="angular-translate">(Precht 2014)</span>. Thanks to two-way binding of AngularJS variables, a simple statement such as <code>$scope.language = 'de'</code> can be enough to update the full availability display in another language.</p>
 <h1 id="conclusions">Conclusions</h1>
-<p><em>This section is still being written</em></p>
-<p>… Utilizing this tool will allow website creators to easily embedd either current information concerning a specific document, or providing a way to request availability information from multiple sources. …</p>
-<p>AngularJS modules, such as <em>ng-suggest</em> and <em>ng-daia</em> presented above, provide an easy method to integrate library services in websites and applications. A basic prequisite to support use of a library service, however, is the availability of an HTTP-based API to this service. Despite existing efforts to open library systems (e.g. the <a href="http://old.diglib.org/architectures/ilsdi/">ILS-DI Recommendations</a> and <a href="www.oclc.org/developer/webservices">WorldCat Web Services</a>) the support of standard APIs in library systems is non-satisfying. Apart from search via SRU and resource synchronization via OAI-PMH, most library services are not provided via an API at all, or the API is specific to the underlying library system only, or it is very complex and only available for internal use (e.g. NCIP). The lack of available APIs, however, is not a technical problem but a problem of motivation to specify, implement, provide, and document these APIs. The examples of how to integrate library services in arbitrary web applications, given in this article, may at least add some motivation to provide library services via open APIs.</p>
-<p>Even if AngularJS is or will not be the technology of your choice, the principle illustrated in the initial diagram above makes sense. Libraries should not only expose their services via openly specified APIs but also provide client libraries to facilitate the integration of these services into web applications. To minimize the work of doing so, one should build on standardized APIs instead of (re)inventing new APIs for every library system.</p>
-<p><em>…lessons learned: development of an API and an API client as AngularJS module is fruitful…</em></p>
-<p>Candidates for most missing AngularJS modules to access library services: SRU and/or OpenSearch (see http://dlib.org/dlib/july10/hammond/07hammond.html for a description/example of both).</p>
-<p><em>…If no common API exists, one must specify one… for instance at GBV we are evaluating APIs to access controlled vocabularies expressed in SKOS (ng-skos)…</em></p>
-<p><em>…some final words…</em></p>
-<hr />
-<p><em>Notes maybe to include in the article text:</em></p>
-<p>A third example can be found as work in progress at <a href="https://github.com/gbv/ng-skos">https://github.com/gbv/ng-skos</a>. <strong>ng-skos</strong> is a module to interact with authority files and other simple knowledge organisation systems (SKOS).</p>
-<p>As is the philosophy of AngularJS easily implementable and reusable solution to this problem. It retrieves the suggestions of a specified service and, using the <a href="http://angular-ui.github.io/bootstrap/">Bootstrap UI</a>, provides a typeahead function for web applications.</p>
-<p>How can the vicious circle of missing APIs to library services be broken?</p>
-<p>(this article is based on the assumption that libraries actually want to facilitate the use of their servics. In some cases this assumption might be wrong).</p>
-<p>an easy way how library services, if available in form of APIs, can be exposed, used and integrated into other web applications.</p>
-<hr />
+<p>Despite efforts to open up library systems via standard APIs, for instance the ILS-DI recommendations <span class="citation" data-cites="ilsdi">(ILS Discovery Interface Task Force 2008)</span>, the support of library services via open APIs is rather low. If APIs exist (e.g. NCIP), they are often complex, vendor-specific, or available only for internal use. One reason for the lack of open APIs may be the invisibility of benefits and usage examples. The examples given in this article demonstrate how library services (e.g. search suggestions, recommendations, document availabilityi…) can be used easily once they have been made available via standardized APIs (e.g. Open Search Suggestions and DAIA).</p>
+<p>The simple integration into web applications also requires client modules like <em>ng-suggest</em> and <em>ng-daia</em> for AngularJS. Missing AngularJS modules for other standard APIs relevant to libraries, such as OpenSearch and SRU for search <span class="citation" data-cites="Hammond2010">(Hammond 2010)</span> and PAIA for patron account interaction <span class="citation" data-cites="PAIA">(Voß 2014)</span>) shouldn’t be hard to implement.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> Most important, these client modules only have to be implemented once instead of having to build both server and client implementation for each particular library system. With a set of AngularJS modules for the basic library services (search, availability, patron account) it should even be possible to create a custom OPAC interface in less than hundred lines of HTML and JavaScript.</p>
+<p>Even if AngularJS is not the framework of your choice, it makes sense to provide client modules to your APIs, as illustrated in figure 1. Libraries should not only expose their services via openly specified APIs but also provide client libraries to facilitate the integration of these services into web applications. To minimize the work of doing so, one should build on standardized APIs independent from particular library systems. We hope to motivate more library developers in doing so.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <div class="references">
 <h1>References</h1>
-<p>“AngularJS Modules.” 2014. <a href="http://ngmodules.org/">http://ngmodules.org/</a>.</p>
-<p>Breeding, Marshall. 2009. “Opening up Library Systems Through Web Services and SOA: Hype or Reality?” 8. Vol. 45. Library Technology Reports. American Library Association.</p>
-<p>Clinton, DeWitt. 2006. “OpenSearch Suggestions.” <a href="http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions">http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions</a>.</p>
-<p>Nagaya, Shun, Yutaka Hayashi, Shuhei Otani, and Keizo Itabashi. 2011. “Controlled Terms or Free Terms? a JavaScript Library to Utilize Subject Headings and Thesauri on the Web.” <em>Code4lib Journal</em> (15) (October 31). <a href="http://journal.code4lib.org/articles/5994">http://journal.code4lib.org/articles/5994</a>.</p>
-<p>Precht, Pascal. 2014. “Angular Translate.” <a href="http://angular-translate.github.io/">http://angular-translate.github.io/</a>.</p>
-<p>Voß, Jakob. 2008. “SeeAlso: a Simple Linkserver Protocol.” <em>Ariadne</em> (57). <a href="http://www.ariadne.ac.uk/issue57/voss/">http://www.ariadne.ac.uk/issue57/voss/</a>.</p>
-<p>Voß, Jakob, and Moritz Horn. 2014a. “Ng-Suggest.” <a href="http://gbv.github.io/ng-suggest/">http://gbv.github.io/ng-suggest/</a>.</p>
-<p>———. 2014b. “Ng-Daia.” <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a>.</p>
-<p>Voß, Jakob, and Uwe Reh. 2014. “Document Availability Information API (DAIA).” <a href="http://purl.org/NET/DAIA">http://purl.org/NET/DAIA</a>.</p>
+<p>Breeding M. 2009. Opening up Library Systems through Web Services and SOA: Hype or Reality? American Library Association.</p>
+<p>Clinton D. 2006. OpenSearch Suggestions. Available from: <a href="http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions">http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions</a></p>
+<p>Hammond T. 2010. nature.com OpenSearch: A Case Study in OpenSearch and SRU Integration. D-Lib Magazine [Internet] 16. Available from: <a href="http://dlib.org/dlib/july10/hammond/07hammond.html">http://dlib.org/dlib/july10/hammond/07hammond.html</a></p>
+<p>Hoskins J ed. 2014. AngularJS Modules. [Internet]. Available from: <a href="http://ngmodules.org/">http://ngmodules.org/</a></p>
+<p>ILS Discovery Interface Task Force ed. 2008. Technical Recommendation. Digital Library Federation. Available from: <a href="http://old.diglib.org/architectures/ilsdi/">http://old.diglib.org/architectures/ilsdi/</a></p>
+<p>Nagaya S, Hayashi Y, Otani S, Itabashi K. 2011. Controlled Terms or Free Terms? A JavaScript Library to Utilize Subject Headings and Thesauri on the Web. code4lib journal [Internet]. Available from: <a href="http://journal.code4lib.org/articles/5994">http://journal.code4lib.org/articles/5994</a></p>
+<p>Precht P. 2014. angular translate. [Internet]. Available from: <a href="http://angular-translate.github.io/">http://angular-translate.github.io/</a></p>
+<p>Voß J, Horn M. 2014a. ng-suggest. [Internet]. Available from: <a href="http://gbv.github.io/ng-suggest/">http://gbv.github.io/ng-suggest/</a></p>
+<p>Voß J, Horn M. 2014b. ng-daia. [Internet]. Available from: <a href="http://gbv.github.io/ng-daia/">http://gbv.github.io/ng-daia/</a></p>
+<p>Voß J, Reh U. 2014. Document Availability Information API (DAIA). Available from: <a href="http://purl.org/NET/DAIA">http://purl.org/NET/DAIA</a></p>
+<p>Voß J. 2008. SeeAlso: A Simple Linkserver Protocol. Ariadne [Internet]. Available from: <a href="http://www.ariadne.ac.uk/issue57/voss/">http://www.ariadne.ac.uk/issue57/voss/</a></p>
+<p>Voß J. 2014. Patrons Account Information API (PAIA). Available from: <a href="http://gbv.github.com/paia/">http://gbv.github.com/paia/</a></p>
 </div>
-<div class="footnotes">
-<hr />
+<section class="footnotes">
+<h1>Endnotes</h1>
 <ol>
-<li id="fn1"><p>All examples are available also as part of the article’s code repository at <a href="http://github.com/jakobib/angularjs2014/">http://github.com/jakobib/angularjs2014/</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>This article is based on the assumption that libraries actually want to facilitate the use of their servics. In some cases this assumption might be wrong.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>All examples are available also as part of the article’s code repository at <a href="http://github.com/jakobib/angularjs2014/">http://github.com/jakobib/angularjs2014/</a>.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>We are currently working on the module <em>ng-skos</em> (<a href="https://github.com/gbv/ng-skos">https://github.com/gbv/ng-skos</a>) to interact with authority files and simple knowledge organisation systems.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>One can also ask the vendor of library systems to implement standardized APIs to the core functionality of its product, but this requires some pressure by libraries as customers.<a href="#fnref4">↩</a></p></li>
 </ol>
-</div>
+</section>
+
+<h1>About the Authors</h1>
+<p><em>Jakob Voß</em> works in research and development at the head office of the Common Library Network (Gemeinsamer Bibliotheksverbund, GBV) in Göttingen.</p>
+<p><em>Moritz Horn</em> studies information management at the University of Applied Sciences and Arts in Hanover.</p>
+
 </body>
 </html>

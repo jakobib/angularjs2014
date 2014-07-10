@@ -1,0 +1,17 @@
+---
+title: Exposing library services with AngularJS
+author:
+- name:  Jakob Voß      
+  about: works in research and development at the head office of the Common 
+         Library Network (Gemeinsamer Bibliotheksverbund, GBV) in Göttingen.
+- name:  Moritz Horn
+  about: studies information management at the University of Applied 
+         Sciences and Arts in Hanover.
+date: 2014-07-11
+abstract: >
+    This article provides an introduction to the JavaScript framework AngularJS and
+    specific AngularJS modules for accessing library services. It shows how
+    information such as search suggestions, additional links, and availability
+    can be embedded in any website. The ease of reuse may encourage more libraries
+    to expose their services via standard APIs to allow usage in different context.
+...

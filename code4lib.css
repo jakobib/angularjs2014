@@ -50,6 +50,9 @@ h3 {
   font-size: 100%;
 }
 
+#issueDesignation {
+  margin-bottom: 0.5em;
+}
 h1.title {
   margin: 0.25em 0 .1em;
   padding-top: 0.5em;
@@ -60,16 +63,15 @@ h1.title {
   color: #522D24;
   line-height: 1;
 }
-h2.author, h3.date {
-  font-weight: normal;
-  font-size: 100%;
-  margin: 0;
-  line-height: 2em;
-  border: none;
+
+.abstract {
+  font-style: italic;
+  margin-left: 3em;
+  margin-right: 3em;
 }
 
-.figure { text-align: center; counter-increment: figures; }
-.caption:before {
+figure { text-align: center; counter-increment: figures; }
+figcaption:before {
     content: 'Figure ' counter(figures) ': ';
     font-weight: bold;
 }
@@ -81,4 +83,22 @@ pre {
   border-width: 2px;
   border-style: solid;
   margin: 0;
+}
+
+.footnoteRef sup {
+    vertical-align: baseline;
+    font-size: small;
+}
+.footnoteRef:before { content: '\00a0['; }
+.footnoteRef:after { content: ']'; }
+.footnotes ol > li { counter-increment: footnotes; }
+.footnotes ol > li:before { 
+    content: '[' counter(footnotes) '] ';
+    float: left;
+    padding-right: 0.5em;
+}
+.footnotes ol {
+    margin-left: 0;
+    padding-left: 0em;
+    list-style-type: none;
 }

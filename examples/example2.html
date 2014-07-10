@@ -1,4 +1,4 @@
-<html ng-app="myApp"
+<html ng-app="myApp">
  <head>
   <script src="angular.min.js"></script>
   <script src="ui-bootstrap-tpls.min.js"></script>
@@ -6,8 +6,8 @@
   <script>
     angular.module('myApp', ['ui.bootstrap','ngSuggest']);
     function MyController($scope) {
-      $scope.api = "https://en.wikipedia.org/w/api.php?action=opensearch&"
-                 + "limit=10&namespace=0&format=json&search=";
+      $scope.api = "https://en.wikipedia.org/w/api.php?action=opensearch"
+                 + "&limit=10&namespace=0&format=json&search=";
       $scope.selectItem = function(item) {
         $scope.item = item;
       };
