@@ -71,7 +71,7 @@ limited to *scopes* that act like namespaces in other programming languages.
 
 The following example illustrates the use of AngularJS with scope variables,
 templates, and directives:^[All examples are available also as part of the
-article's code repository at <http://github.com/jakobib/angularjs2014/>.]
+article's code repository at <https://github.com/jakobib/angularjs2014/>.]
 
 ```{.html}
 <html ng-app="myApp">
@@ -116,7 +116,7 @@ modules for easy reuse: the *ng-suggest* module provides access to search
 suggestions and links [@ngsuggest] and the *ng-daia* module provides access to
 availability information [@ngdaia]. Both modules are hosted at public git 
 repositories with API documentation, examples, and downloads 
-(<http://gbv.github.io/ng-suggest/> and <http://gbv.github.io/ng-daia/>).
+(<https://gbv.github.io/ng-suggest/> and <https://gbv.github.io/ng-daia/>).
 
 ## Suggestions with ng-suggest
 
@@ -247,13 +247,13 @@ once they have been made available via standardized APIs (e.g. Open Search
 Suggestions and DAIA). 
 
 The simple integration into web applications also requires client modules like
-*ng-suggest* and *ng-daia* for AngularJS.  Missing AngularJS modules for other
-standard APIs relevant to libraries, such as OpenSearch and SRU for search
-[@Hammond2010] and PAIA for patron account interaction [@PAIA]) shouldn't be
-hard to implement.^[We are currently working on the module *ng-skos*
+*ng-suggest* and *ng-daia* for AngularJS.  Modules for other standard APIs
+relevant to libraries, such as OpenSearch and SRU for search [@Hammond2010] and
+PAIA for patron account interaction [@PAIA], shouldn't be hard to
+implement.^[We are currently working on the module *ng-skos*
 (<https://github.com/gbv/ng-skos>) to interact with authority files and simple
-knowledge organisation systems.] Most importantly, these client modules only have
-to be implemented once instead of having to build both server and client
+knowledge organisation systems.] Most importantly, these client modules only
+have to be implemented once instead of having to build both server and client
 implementation for each particular library system. With a set of AngularJS
 modules for the basic library services (search, availability, patron account)
 it should even be possible to create a custom OPAC interface in less than
@@ -271,7 +271,7 @@ product, but this requires some pressure by libraries as customers.]
 
 [DAIA]: http://purl.org/NET/DAIA
 [AngularJS]: https://angularjs.org/
-[angular-translate]: http://angular-translate.github.io/
+[angular-translate]: https://angular-translate.github.io/
 
 # References
 
