@@ -1,7 +1,7 @@
 # Introduction
 
-The demand to open up library systems through web services has been known since
-years [@Breeding2009]. In particular service-oriented architecture (SOA)
+The demand to open up library systems through web services has been known for
+years [@Breeding2009]. In particular, service-oriented architecture (SOA)
 promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
 rarely built of loosely coupled parts that could be used independently.
@@ -20,8 +20,7 @@ services via open APIs.
 
 User interfaces are curated and revised by usability studies
 and user experience (UX) at best. In other instances the UI is simply judged
-with common sense by normal library staff and management. 
-APIs on the other hand, cannot simply be viewed,
+with common sense by normal library staff and management. APIs on the other hand, cannot simply be viewed,
 used, and judged by anyone. Unlike the UI, an API is not a final application to
 make use of a service, but the basis for creation of service applications:
 Without APIs, applications are difficult to build and services can only be
@@ -61,7 +60,7 @@ Application logic is first grouped in *modules*, each included with an HTML
 *directives*. These directives can be used in form of custom HTML tags and
 attributes ("declarative HTML"). The core AngularJS module contains directives
 for basic programming syntax in HTML, such as conditionals (`ng-if`) and loops
-(`ng-repeat`), among others. This extension of HTML is further enriched to a a
+(`ng-repeat`), among others. This extension of HTML is further enriched by a
 template syntax with AngularJS *expressions* written in curly brackets
 (`{{...}}`). The most common use of these expression is to dynamically display
 variables in HTML templates. In contrast to most other template systems,
@@ -172,7 +171,7 @@ typeahead features to an input form element:
 </html>
 ```
 
-The resulting HTML page looks like the following figure:
+The resulting HTML page would look like this:
 
 ![Suggest Wikipedia articles with ng-suggest](suggest_wikipedia_en.png)
 
@@ -189,8 +188,7 @@ current availability of documents. Its aim is to provide a way for libraries to
 allow open and easy-to-use access to holding information from their catalogs.
 This, in turn, enables the inclusion of document availability information in
 external applications and websites (catalogs, reference management, e-learning
-platforms etc.). Among other formats, DAIA provides
-availability information in JSON, the first choice for web applications written
+platforms etc.). Among other formats, DAIA provides availability information in JSON, the first choice for web applications written
 in JavaScript. The AngularJS module *ng-daia* implements client code to execute
 and process a DAIA query and to display holding information in convenient form.
 The integration into HTML is exemplarily documented in the following code: 
@@ -244,7 +242,7 @@ is rather low. If APIs exist (e.g. NCIP), they are often complex,
 vendor-specific, or available only for internal use. One reason for the lack of
 open APIs may be the invisibility of benefits and usage examples. The examples
 given in this article demonstrate how library services (e.g. search
-suggestions, recommendations, document availabilityi...) can be used easily
+suggestions, recommendations, document availability...) can be used easily
 once they have been made available via standardized APIs (e.g. Open Search
 Suggestions and DAIA). 
 
@@ -254,7 +252,7 @@ standard APIs relevant to libraries, such as OpenSearch and SRU for search
 [@Hammond2010] and PAIA for patron account interaction [@PAIA]) shouldn't be
 hard to implement.^[We are currently working on the module *ng-skos*
 (<https://github.com/gbv/ng-skos>) to interact with authority files and simple
-knowledge organisation systems.] Most important, these client modules only have
+knowledge organisation systems.] Most importantly, these client modules only have
 to be implemented once instead of having to build both server and client
 implementation for each particular library system. With a set of AngularJS
 modules for the basic library services (search, availability, patron account)
@@ -262,7 +260,7 @@ it should even be possible to create a custom OPAC interface in less than
 hundred lines of HTML and JavaScript.
 
 Even if AngularJS is not the framework of your choice, it makes sense to
-provide client modules to your APIs, as illustrated in figure 1.  Libraries
+provide client modules to your APIs, as illustrated in figure 1. Libraries
 should not only expose their services via openly specified APIs but also
 provide client libraries to facilitate the integration of these services into
 web applications. To minimize the work of doing so, one should build on
