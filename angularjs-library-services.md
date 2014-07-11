@@ -5,20 +5,20 @@ years [@Breeding2009]. In particular, service-oriented architecture (SOA)
 promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
 rarely built of loosely coupled parts that could be used independently.
-The background of this abidance on monolithical systems must be discussed
+The background of this abidance on monolithical systems is to be discussed
 elsewhere, but one reason might be a lack of motivation to provide library
 services via open APIs.
 
 ## Library services and APIs
 
-Services provided by a library or similar institution should be easy to use by 
+Services provided by a library or similar institution should be easy-to-use for
 anyone and in any form. Most services, however, can only be used in the fixed
 context of a particular user interface. If a service can be accessed via
 application programming interface (API), it can also be integrated and used
 in other applications. Nevertheless there is a lack of motivation to expose
 services via open APIs.
 
-User interfaces are curated and revised by usability studies
+User interfaces (UIs) are curated and revised by usability studies
 and user experience (UX) at best. In other instances the UI is simply judged
 with common sense by normal library staff and management. APIs on the other hand, cannot simply be viewed,
 used, and judged by anyone. Unlike the UI, an API is not a final application to
@@ -66,7 +66,7 @@ template syntax with AngularJS *expressions* written in curly brackets
 variables in HTML templates. In contrast to most other template systems,
 variables are bound two-way: the display is updated automatically when a
 variable is changed, and changes of the HTML document (e.g. by input forms) are
-reflected in the JavaScript variables. Part of modularization, variables are
+reflected in the JavaScript variables. As well, as a result of the modularization, variables are
 limited to *scopes* that act like namespaces in other programming languages.
 
 The following example illustrates the use of AngularJS with scope variables,
@@ -114,7 +114,7 @@ The practical embedding of library services in websites with AngularJS is
 illustrated in the following with two examples. Both are available as AngularJS
 modules for easy reuse: the *ng-suggest* module provides access to search 
 suggestions and links [@ngsuggest] and the *ng-daia* module provides access to
-availability information [@ngdaia]. Both modules are hosted in public git 
+availability information [@ngdaia]. Both modules are hosted at public git 
 repositories with API documentation, examples, and downloads 
 (<http://gbv.github.io/ng-suggest/> and <http://gbv.github.io/ng-daia/>).
 
@@ -124,7 +124,7 @@ The OpenSearch standard for search engines includes a specification for how to
 query search suggestions and autocomplete services via HTTP [@Clinton2006].
 Suggestion services are provided by many search applications as "typeahead".
 The method can also be used for instance by recommendation services [@Voss2008] 
-and to support support tagging with controlled vocabularies [@Nagaya2011].
+and to support tagging with controlled vocabularies [@Nagaya2011].
 
 ![Typeahead via OpenSearch Suggestions](typeahead.jpg)
 
