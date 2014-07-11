@@ -11,21 +11,21 @@ services via open APIs.
 
 ## Library services and APIs
 
-Services provided by a library or similar institution should be easy-to-use for
-anyone and in any form. Most services, however, can only be used in the fixed
-context of a particular user interface. If a service can be accessed via
-application programming interface (API), it can also be integrated and used
-in other applications. Nevertheless there is a lack of motivation to expose
+Services provided by a library or similar institution should be easy to be used
+by anyone and in any form. Most services, however, can only be used in the
+fixed context of a particular user interface. If a service can be accessed via
+application programming interface (API), it can also be integrated and used in
+other applications. Nevertheless there is a lack of motivation to expose
 services via open APIs.
 
-User interfaces (UIs) are curated and revised by usability studies
-and user experience (UX) at best. In other instances the UI is simply judged
-with common sense by normal library staff and management. APIs on the other hand, cannot simply be viewed,
-used, and judged by anyone. Unlike the UI, an API is not a final application to
-make use of a service, but the basis for creation of service applications:
-Without APIs, applications are difficult to build and services can only be
-provided in limited form. Without applications, however, it is difficult to
-justify the need for an API.
+User interfaces (UIs) are curated and revised by usability studies and user
+experience (UX) at best. In other instances the UI is simply judged with common
+sense by normal library staff and management. APIs on the other hand, cannot
+simply be viewed, used, and judged by anyone. Unlike the UI, an API is not a
+final application to make use of a service, but the basis for creation of
+service applications: Without APIs, applications are difficult to build and
+services can only be provided in limited form. Without applications, however,
+it is difficult to justify the need for an API.
 
 To give an example, most library systems lack an API to query current
 availability of documents held by the library. As long as information about
@@ -66,8 +66,9 @@ template syntax with AngularJS *expressions* written in curly brackets
 variables in HTML templates. In contrast to most other template systems,
 variables are bound two-way: the display is updated automatically when a
 variable is changed, and changes of the HTML document (e.g. by input forms) are
-reflected in the JavaScript variables. As well, as a result of the modularization, variables are
-limited to *scopes* that act like namespaces in other programming languages.
+reflected in the JavaScript variables. To avoid name collision and to better
+separate functionality of different directives, variables belong to *scopes*
+that act like namespaces in other programming languages.
 
 The following example illustrates the use of AngularJS with scope variables,
 templates, and directives:^[All examples are available also as part of the
@@ -175,11 +176,11 @@ The resulting HTML page would look like this:
 
 ![Suggest Wikipedia articles with ng-suggest](suggest_wikipedia_en.png)
 
-Similar suggestions can be provided for any Open Search Suggestions service
-by just changing the service's base URL. Among other features, responses can be
-embedded as simple lists (SeeAlso recommender services, for instance related 
-documents and related publications), and different JSON response formats can 
-be mapped from.
+Similar suggestions can be provided for any Open Search Suggestions service by
+just changing the service's base URL. Among other features, responses can be
+embedded as simple lists (SeeAlso recommender services, for instance related
+documents and related publications), and other JSON response formats can be
+mapped to suggestions format.
 
 ## Availability with ng-daia
 
@@ -188,10 +189,11 @@ current availability of documents. Its aim is to provide a way for libraries to
 allow open and easy-to-use access to holding information from their catalogs.
 This, in turn, enables the inclusion of document availability information in
 external applications and websites (catalogs, reference management, e-learning
-platforms etc.). Among other formats, DAIA provides availability information in JSON, the first choice for web applications written
-in JavaScript. The AngularJS module *ng-daia* implements client code to execute
-and process a DAIA query and to display holding information in convenient form.
-The integration into HTML is exemplarily documented in the following code: 
+platforms etc.). Among other formats, DAIA provides availability information in
+JSON, the first choice for web applications written in JavaScript. The
+AngularJS module *ng-daia* implements client code to execute and process a DAIA
+query and to display holding information in convenient form.  The integration
+into HTML is exemplarily documented in the following code: 
 
 ```{.html}
 <html ng-app="myApp">
@@ -217,14 +219,14 @@ fed to a customizable AngularJS template, resulting in the following display:
 
 The full availability view as implemented in the default templates of *ng-daia*
 reflects the nested structure of DAIA data model, consisting of an outer layer
-for institutional and general document information and displays for particular
-document holdings [@DAIA]. The default template of directive `ng-api` uses
-another directive for display of holding item (`daia-item`) and its item 
+for institutional and general document information, and specific information
+for each document holding [@DAIA]. The default template of directive `ng-api`
+uses another directive for display of holding item (`daia-item`) and its item
 template can be customized as well. Another directive is provided for most
 compact display (`daia-simple`, see figure 5). DAIA Simple is a flattened,
-aggregated form of availability information that covers typical use cases,
-such as short display in a result list [@DAIA, section 6.1]. The *ng-daia* 
-module includes functions to transform from full DAIA to DAIA simple as well.
+aggregated form of availability information that covers typical use cases, such
+as short display in a result list [@DAIA, section 6.1]. The *ng-daia* module
+includes functions to transform from full DAIA to DAIA simple as well.
 
 ![Minimal availability view with daia-simple](ngdaia_simple.png)
 
