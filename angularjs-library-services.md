@@ -4,21 +4,20 @@ The demand to open up library systems through web services has been known for
 years [@Breeding2009]. In particular, service-oriented architecture (SOA)
 promised to better allow a continuous evolution of library automation and to
 better connect with external systems. Nevertheless current library systems are
-rarely built of loosely coupled parts that could be used independently.
-The background of this abidance on monolithical systems is to be discussed
-elsewhere, but one reason might be a lack of motivation to provide library
-services via open APIs.
+rarely built of loosely coupled parts that could be used independently. This
+reliance on monolithic systems results in a lack of open APIs to library
+services.
 
 ## Library services and APIs
 
-Services provided by a library or similar institution should be easy to be used
-by anyone and in any form. Most services, however, can only be used in the
-fixed context of a particular user interface. If a service can be accessed via
-application programming interface (API), it can also be integrated and used in
-other applications. Nevertheless there is a lack of motivation to expose
-services via open APIs.
+Services provided by a library or similar institution should be easy to use by
+anyone and in any form. Most services, however, can only be used in the fixed
+context of a particular user interface (UI). If a service is also accessible
+via application programming interface (API), its functionality can be
+integrated and used in other applications too. Unfortunately the need to expose
+services via open APIs is less obvious than UIs.
 
-User interfaces (UIs) are curated and revised by usability studies and user
+User interfaces are curated and revised by usability studies and user
 experience (UX) at best. In other instances the UI is simply judged with common
 sense by normal library staff and management. APIs on the other hand, cannot
 simply be viewed, used, and judged by anyone. Unlike the UI, an API is not a
@@ -32,18 +31,18 @@ availability of documents held by the library. As long as information about
 current availability was only displayed in local library OPACs there was little
 motivation to create a public API for this purpose. With the need to display
 availability information in discovery interfaces such as VuFind, the Document
-Availability Information API ([DAIA]) was specified and implemented at GBV
-[@DAIA]. But little interest was shown by other libraries and system vendors as
-long as they did not require the API for internal use. The full benefit of an
-open API is not revealed until different applications by different parties make
-use of it. This article will demonstrate a possible strategy to increase
-visibility and use of library APIs by providing client modules that facilitate
-the creation of applications by third parties.^[This article is based on the
-assumption that libraries actually want to facilitate the use of their servics.
-In some cases this assumption might be wrong.] The modules are based on the
-JavaScript framework AngularJS which is getting more and more popular among
-developers of web applications. The general strategy is illustrated in the
-following diagram:
+Availability Information API (DAIA) was created at Gemeinsamer
+Bibliotheksverbund (GBV) [@DAIA]. But little interest was shown by other
+libraries and system vendors as long as they did not require the API for
+internal use. The full benefit of an open API is not revealed until different
+applications by different parties make use of it. This article will demonstrate
+a possible strategy to increase visibility and use of library APIs by providing
+client modules that facilitate the creation of applications by third
+parties.^[This article is based on the assumption that libraries actually want
+to facilitate the use of their servics.  In some cases this assumption might be
+wrong.] The modules are based on the JavaScript framework [AngularJS] which is
+getting more and more popular among developers of web applications. The general
+strategy is illustrated in the following diagram:
 
 ![From library service to web application](layers.png)
 
@@ -55,9 +54,9 @@ modularization on multiple levels. Functionality of applications is broken into
 parts that can be tested and reused independently. 
 
 Application logic is first grouped in *modules*, each included with an HTML
-`<script>` tag. Some popular modules are listed at the inofficial directory
+`<script>` tag. Some popular modules are listed at the unofficial directory
 <http://ngmodules.org/>. Modules may build on each other and define
-*directives*. These directives can be used in form of custom HTML tags and
+*directives*. These directives can be used in the form of custom HTML tags and
 attributes ("declarative HTML"). The core AngularJS module contains directives
 for basic programming syntax in HTML, such as conditionals (`ng-if`) and loops
 (`ng-repeat`), among others. This extension of HTML is further enriched by a
@@ -106,13 +105,13 @@ variable "books" of a given scope. The controller is later used in the HTML
 body to display a sorted list of books with an HTML template. The template
 makes use of standard AngularJS directives (`ng-repeat`, `ng-if`) and
 expressions (`| orderBy:'title'`, `b.title`, `b.author`). The application logic
-to create such a list could also be packed in a new directive to be used as
-"widget" at multiple places.
+to create such a list could also be packed in a new directive to be used a as
+"widget" in multiple places.
 
 # Modules for embedding library services
 
 The practical embedding of library services in websites with AngularJS is
-illustrated in the following with two examples. Both are available as AngularJS
+illustrated in the following two examples. Both are available as AngularJS
 modules for easy reuse: the *ng-suggest* module provides access to search 
 suggestions and links [@ngsuggest] and the *ng-daia* module provides access to
 availability information [@ngdaia]. Both modules are hosted at public git 
@@ -184,16 +183,19 @@ mapped to suggestions format.
 
 ## Availability with ng-daia
 
-DAIA defines a data model and an HTTP API for accessing information about the
-current availability of documents. Its aim is to provide a way for libraries to
-allow open and easy-to-use access to holding information from their catalogs.
-This, in turn, enables the inclusion of document availability information in
-external applications and websites (catalogs, reference management, e-learning
-platforms etc.). Among other formats, DAIA provides availability information in
-JSON, the first choice for web applications written in JavaScript. The
-AngularJS module *ng-daia* implements client code to execute and process a DAIA
-query and to display holding information in convenient form.  The integration
-into HTML is exemplarily documented in the following code: 
+The [DAIA specification] defines a data model and an HTTP API for accessing
+information about the current availability of documents [@DAIA]. In contrast to
+complex internal library system APIs, such as NCIP and SLNP, DAIA was designed
+to be used openly. The aim of DAIA is to provide a way for libraries to allow
+open and easy-to-use access to holdings information from their catalogs.  This,
+in turn, enables the inclusion of document availability information in external
+applications and websites (catalogs, reference management, e-learning
+platforms, etc.). Among other formats, DAIA provides availability information
+in JSON, the first choice for web applications written in JavaScript. 
+
+The AngularJS module *ng-daia* implements client code to execute and process a
+DAIA query and to display holding information in convenient form.  Below is an
+example of the HTML integration:
 
 ```{.html}
 <html ng-app="myApp">
@@ -221,20 +223,22 @@ The full availability view as implemented in the default templates of *ng-daia*
 reflects the nested structure of DAIA data model, consisting of an outer layer
 for institutional and general document information, and specific information
 for each document holding [@DAIA]. The default template of directive `ng-api`
-uses another directive for display of holding item (`daia-item`) and its item
-template can be customized as well. Another directive is provided for most
+uses another directive for the display of a holding item (`daia-item`) and its
+item template can be customized as well. Another directive is provided for most
 compact display (`daia-simple`, see figure 5). DAIA Simple is a flattened,
 aggregated form of availability information that covers typical use cases, such
-as short display in a result list [@DAIA, section 6.1]. The *ng-daia* module
-includes functions to transform from full DAIA to DAIA simple as well.
+as short display in a result list (see section 6.1 of the [DAIA specification]).
+The *ng-daia* module includes functions to transform from full DAIA to DAIA
+simple as well.
 
 ![Minimal availability view with daia-simple](ngdaia_simple.png)
 
-All templates included in *ng-daia* can be customized with CSS. Localization 
-for display in other languages is already supported with the popular module 
-[angular-translate] [@angular-translate]. Thanks to two-way binding of 
-AngularJS variables, a simple statement such as `$scope.language = 'de'` can
-be enough to update the full availability display in another language.
+All templates included in *ng-daia* can be customized with CSS. Localization
+for display in other languages is already supported with the popular module
+[angular-translate](https://angular-translate.github.io/) [@angular-translate].
+Thanks to two-way binding of AngularJS variables, a simple statement such as
+`$scope.language = 'de'` can be enough to update the full availability display
+in another language.
 
 # Conclusions
 
@@ -244,8 +248,8 @@ is rather low. If APIs exist (e.g. NCIP), they are often complex,
 vendor-specific, or available only for internal use. One reason for the lack of
 open APIs may be the invisibility of benefits and usage examples. The examples
 given in this article demonstrate how library services (e.g. search
-suggestions, recommendations, document availability...) can be used easily
-once they have been made available via standardized APIs (e.g. Open Search
+suggestions, recommendations, document availability) can be used easily once
+they have been made available via standardized APIs (e.g. Open Search
 Suggestions and DAIA). 
 
 The simple integration into web applications also requires client modules like
@@ -259,7 +263,7 @@ have to be implemented once instead of having to build both server and client
 implementation for each particular library system. With a set of AngularJS
 modules for the basic library services (search, availability, patron account)
 it should even be possible to create a custom OPAC interface in less than
-hundred lines of HTML and JavaScript.
+a hundred lines of HTML and JavaScript.
 
 Even if AngularJS is not the framework of your choice, it makes sense to
 provide client modules to your APIs, as illustrated in figure 1. Libraries
@@ -271,9 +275,8 @@ motivate more library developers in doing so.^[One can also ask the vendor of
 library systems to implement standardized APIs to the core functionality of its
 product, but this requires some pressure by libraries as customers.]
 
-[DAIA]: http://purl.org/NET/DAIA
+[DAIA specification]: http://purl.org/NET/DAIA
 [AngularJS]: https://angularjs.org/
-[angular-translate]: https://angular-translate.github.io/
 
 # References
 
